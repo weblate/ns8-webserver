@@ -1,0 +1,24 @@
+[Unit]
+Description=Podman  php8.1-fpm.service
+BindsTo=webserver.service
+After=nginx.service
+
+[Service]
+Environment=PODMAN_SYSTEMD_UNIT=%n
+EnvironmentFile=%S/state/environment
+Restart=always
+TimeoutStopSec=70
+ExecStartPre=/bin/rm -f %t/php8.1-fpm.pid %t/php8.1-fpm.ctr-id
+ExecStart=/usr/bin/podman run --conmon-pidfile %t/php8.1-fpm.pid \
+    --cidfile %t/php8.1-fpm.ctr-id --cgroups=no-conmon \
+    --pod-id-file %t/webserver.pod-id --replace -d --name  php8.1-fpm \
+    --env-file=%S/state/environment \
+    -v %h/.config/site:/app:Z -v %h/.config/php8.1-fpm-custom.d:/opt/bitnami/php/etc/php-fpm.d:Z \
+    docker.io/bitnami/php-fpm:8.1.3
+ExecStop=/usr/bin/podman stop --ignore --cidfile %t/php8.1-fpm.ctr-id -t 10
+ExecStopPost=/usr/bin/podman rm --ignore -f --cidfile %t/php8.1-fpm.ctr-id
+PIDFile=%t/php8.1-fpm.pid
+Type=forking
+
+[Install]
+WantedBy=default.target
