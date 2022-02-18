@@ -26,3 +26,4 @@ Type=forking
 
 [Install]
 WantedBy=default.target
+
