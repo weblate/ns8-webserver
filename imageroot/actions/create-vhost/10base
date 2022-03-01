@@ -1,0 +1,32 @@
+#!/usr/bin/env python3
+
+import configparser
+import os
+import json
+import sys
+# agent is a NethServer library which provides function to communicate with the agent
+import agent
+#  {"wiki_name": "mywiki", "username": "admin", "password": "admin", "email": "admin@test.local", "user_full_name": "Administrator"}
+config = configparser.ConfigParser()
+# Try to parse the stdin as JSON.
+# If parsing fails, output everything to stderr
+data = json.load(sys.stdin)
+
+FileName = data.get("ServerNames").split(',')
+ServerNames = data.get("ServerNames")
+PhpVersion = data.get("PhpVersion")
+NextFpmPort = os.environ["NextFpmPort"]
+MODULE_ID = os.environ["MODULE_ID"]
+config['vhost'] = {}
+config['vhost']['ServerNames'] = ServerNames
+config['vhost']['port'] = NextFpmPort
+config['vhost']['PhpVersion'] = PhpVersion
+
+with open( '/home/' + MODULE_ID +'/.config/databases/vhosts/' + FileName[0] +'.ini', 'w') as configfile:
+    config.write(configfile)
+
+NextFpmPort = int(NextFpmPort) + 1
+agent.set_env("NextFpmPort", NextFpmPort)
+# Make sure everything is saved inside the environment file
+# just before starting systemd unit
+agent.dump_env()

@@ -1,0 +1,64 @@
+#!/usr/bin/python3
+
+#
+# Copyright (C) 2022 Nethesis S.r.l.
+# http://www.nethesis.it - nethserver@nethesis.it
+#
+# This script is part of NethServer.
+#
+# NethServer is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License,
+# or any later version.
+#
+# NethServer is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with NethServer.  If not, see COPYING.
+#
+
+import os
+import glob
+import configparser
+import json
+
+dir = '.config/conf.d/dyn-*'
+for file in glob.iglob(dir, recursive=True):
+    os.remove(file)
+
+dir = '.config/php*-fpm-custom.d/dyn-*'
+for file in glob.iglob(dir, recursive=True):
+    os.remove(file)
+
+
+
+
+path=".config/databases/vhosts/*"
+for file in glob.iglob(path, recursive=True):
+    config = configparser.ConfigParser()
+    config.read(file)
+    servernames = config['vhost']['servernames'].split(',')
+    port = config['vhost']['port']
+    phpversion = config['vhost']['phpversion']
+    s = ' '
+
+    properties = {
+    "names": s.join(servernames),
+    "rootFolder": servernames[0],
+    "port": port,
+    "phpversion": phpversion
+    }
+
+    json_properties = json.dumps(properties)
+
+    vhost_path = "' > .config/conf.d/dyn-"+servernames[0]+".conf"
+    cli_vhost = "/usr/local/bin/runagent  expand-template .config/templates/vhost-nginx.conf '" +json_properties+vhost_path
+    os.system(cli_vhost)
+
+    if phpversion:
+        fpm_path = "' > .config/php"+phpversion+"-fpm-custom.d/dyn-"+servernames[0]+".conf"
+        cli_fpm = "/usr/local/bin/runagent  expand-template .config/templates/php-fpm-pool.conf '" +json_properties+fpm_path
+        os.system(cli_fpm)

@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/bin/bash
 
 #
 # Copyright (C) 2022 Nethesis S.r.l.
@@ -20,28 +20,6 @@
 # along with NethServer.  If not, see COPYING.
 #
 
-import os
-import sys
-import json
-from jinja2 import Environment, FileSystemLoader, select_autoescape
+# If the control reaches this step, the service can be enabled and started
 
-'''
-The context must be a json valid content
-
-usage: 
-
-/usr/local/bin/runagent  expand-template /path/2/read/template '{"prop1":"value","prop2":["1","2","3"],"object":{"prop":["1","2","3"]}}' > path/2/expand 
-'''
-
-
-template_file = sys.argv[1]
-context = json.loads(sys.argv[2])
-
-jenv = Environment(
-    loader=FileSystemLoader(os.path.expanduser("~/")),
-    autoescape=select_autoescape(),
-    keep_trailing_newline=True,
-)
-
-tmpl = jenv.get_template(template_file)
-tmpl.stream(context).dump(sys.stdout)
+systemctl --user restart webserver.service
