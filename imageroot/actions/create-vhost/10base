@@ -30,3 +30,8 @@ agent.set_env("NextFpmPort", NextFpmPort)
 # Make sure everything is saved inside the environment file
 # just before starting systemd unit
 agent.dump_env()
+
+# we need to create the webroot folder for the website
+path='/home/' + MODULE_ID +'/.config/websites/' + FileName[0]
+if not os.path.isdir(path):
+    os.mkdir(path)
