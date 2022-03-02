@@ -13,7 +13,7 @@ ExecStart=/usr/bin/podman run --conmon-pidfile %t/nginx.pid \
     --cidfile %t/nginx.ctr-id --cgroups=no-conmon \
     --pod-id-file %t/webserver.pod-id --replace -d --name  nginx \
     --env-file=%S/state/environment \
-    -v %h/.config/conf.d:/etc/nginx/conf.d:z -v %h/.config/site:/usr/share/nginx/html:Z \
+    -v %h/.config/conf.d:/etc/nginx/conf.d:z -v %h/.config/websites:/usr/share/nginx/html:Z \
     docker.io/nginx:1.20.2
 ExecStop=/usr/bin/podman stop --ignore --cidfile %t/nginx.ctr-id -t 10
 ExecStopPost=/usr/bin/podman rm --ignore -f --cidfile %t/nginx.ctr-id
