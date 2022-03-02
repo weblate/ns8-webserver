@@ -1,7 +1,6 @@
 [Unit]
 Description=Podman  nginx.service
 BindsTo=webserver.service
-After=nginx.service
 
 [Service]
 Environment=PODMAN_SYSTEMD_UNIT=%n
