@@ -32,6 +32,6 @@ agent.set_env("NextFpmPort", NextFpmPort)
 agent.dump_env()
 
 # we need to create the webroot folder for the website
-path='/home/' + MODULE_ID +'/.config/websites/' + FileName[0]
+path='/home/' + MODULE_ID +'/.local/share/containers/storage/volumes/websites/_data/' + FileName[0]
 if not os.path.isdir(path):
     os.mkdir(path)
