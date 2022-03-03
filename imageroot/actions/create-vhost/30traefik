@@ -58,7 +58,7 @@ for host in servernames:
         agent_id=default_traefik_id,
         action='set-route',
         data={
-            'instance': os.environ['MODULE_ID'],
+            'instance': os.environ['MODULE_ID']+ '-' + host,
             'url': f'http://127.0.0.1:{os.environ["TCP_PORT"]}',
             'host': host,
             'lets_encrypt': le,
