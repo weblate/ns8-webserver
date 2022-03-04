@@ -17,12 +17,13 @@ ServerNames = data.get("ServerNames")
 PhpVersion = data.get("PhpVersion")
 NextFpmPort = os.environ["NextFpmPort"]
 MODULE_ID = os.environ["MODULE_ID"]
+AGENT_STATE_DIR = os.environ["AGENT_STATE_DIR"]
 config['vhost'] = {}
 config['vhost']['ServerNames'] = ServerNames
 config['vhost']['port'] = NextFpmPort
 config['vhost']['PhpVersion'] = PhpVersion
 
-with open( '/home/' + MODULE_ID +'/.config/databases/vhosts/' + FileName[0] +'.ini', 'w') as configfile:
+with open( 'databases/vhosts/' + FileName[0] +'.ini', 'w') as configfile:
     config.write(configfile)
 
 NextFpmPort = int(NextFpmPort) + 1

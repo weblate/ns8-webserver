@@ -24,19 +24,18 @@ import os
 import glob
 import configparser
 import json
+import sys
+import subprocess
 
-dir = '.config/conf.d/dyn-*'
+dir = 'conf.d/dyn-*'
 for file in glob.iglob(dir, recursive=True):
     os.remove(file)
 
-dir = '.config/php*-fpm-custom.d/dyn-*'
+dir = 'php*-fpm-custom.d/dyn-*'
 for file in glob.iglob(dir, recursive=True):
     os.remove(file)
 
-
-
-
-path=".config/databases/vhosts/*"
+path="databases/vhosts/*"
 for file in glob.iglob(path, recursive=True):
     config = configparser.ConfigParser()
     config.read(file)
@@ -53,12 +52,11 @@ for file in glob.iglob(path, recursive=True):
     }
 
     json_properties = json.dumps(properties)
-
-    vhost_path = "' > .config/conf.d/dyn-"+servernames[0]+".conf"
-    cli_vhost = "/usr/local/bin/runagent  expand-template .config/templates/vhost-nginx.conf '" +json_properties+vhost_path
-    os.system(cli_vhost)
+    file = open("conf.d/dyn-"+servernames[0]+".conf","w")
+    subprocess.run(["/usr/local/bin/runagent","expand-template","vhost-nginx.conf",json_properties],stdout=file)
+    file.close()
 
     if phpversion:
-        fpm_path = "' > .config/php"+phpversion+"-fpm-custom.d/dyn-"+servernames[0]+".conf"
-        cli_fpm = "/usr/local/bin/runagent  expand-template .config/templates/php-fpm-pool.conf '" +json_properties+fpm_path
-        os.system(cli_fpm)
+        file = open("php"+phpversion+"-fpm-custom.d/dyn-"+servernames[0]+".conf", "w")
+        subprocess.run(["/usr/local/bin/runagent","expand-template","php-fpm-pool.conf",json_properties],stdout=file)
+        file.close()

@@ -38,7 +38,7 @@ template_file = sys.argv[1]
 context = json.loads(sys.argv[2])
 
 jenv = Environment(
-    loader=FileSystemLoader(os.path.expanduser("~/")),
+    loader=FileSystemLoader(os.getenv("AGENT_STATE_DIR")+"/templates"),
     autoescape=select_autoescape(),
     keep_trailing_newline=True,
 )

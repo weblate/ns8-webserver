@@ -6,6 +6,7 @@ After=nginx.service
 [Service]
 Environment=PODMAN_SYSTEMD_UNIT=%n
 EnvironmentFile=%S/state/environment
+WorkingDirectory=%S/state
 Restart=always
 TimeoutStopSec=70
 ExecStartPre=/bin/rm -f %t/php8.0-fpm.pid %t/php8.0-fpm.ctr-id
@@ -13,7 +14,7 @@ ExecStart=/usr/bin/podman run --conmon-pidfile %t/php8.0-fpm.pid \
     --cidfile %t/php8.0-fpm.ctr-id --cgroups=no-conmon \
     --pod-id-file %t/webserver.pod-id --replace -d --name  php8.0-fpm \
     --env-file=%S/state/environment \
-    -v websites:/app:Z -v %h/.config/php8.0-fpm-custom.d:/opt/bitnami/php/etc/php-fpm.d:Z \
+    --volume websites:/app:z --volume ./php8.0-fpm-custom.d:/opt/bitnami/php/etc/php-fpm.d:Z \
     docker.io/bitnami/php-fpm:8.0.16
 ExecStop=/usr/bin/podman stop --ignore --cidfile %t/php8.0-fpm.ctr-id -t 10
 ExecStopPost=/usr/bin/podman rm --ignore -f --cidfile %t/php8.0-fpm.ctr-id

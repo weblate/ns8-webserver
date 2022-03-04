@@ -13,9 +13,10 @@ data = json.load(sys.stdin)
 
 ServerNames = data.get("ServerNames").split(',')
 MODULE_ID = os.environ["MODULE_ID"]
+AGENT_STATE_DIR = os.environ["AGENT_STATE_DIR"]
 
 # remove the database configuration
-path = '/home/' + MODULE_ID +'/.config/databases/vhosts/' + ServerNames[0] +'.ini'
+path = databases/vhosts/' + ServerNames[0] +'.ini'
 if os.path.exists(path):
     os.remove(path)
 
