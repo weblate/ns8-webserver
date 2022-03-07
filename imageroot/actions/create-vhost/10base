@@ -22,6 +22,8 @@ import configparser
 import os
 import json
 import sys
+import subprocess
+
 # agent is a NethServer library which provides function to communicate with the agent
 import agent
 
@@ -33,23 +35,24 @@ data = json.load(sys.stdin)
 FileName = data.get("ServerNames").split(',')
 ServerNames = data.get("ServerNames")
 PhpVersion = data.get("PhpVersion")
-NextFpmPort = os.environ["NextFpmPort"]
 MODULE_ID = os.environ["MODULE_ID"]
+
+with open("databases/NextFpmPort", "r+") as fp:
+    NextFpmPort = int(fp.read() or "9100") + 1
+    fp.seek(0)
+    fp.write(str(NextFpmPort))
 
 config['vhost'] = {}
 config['vhost']['ServerNames'] = ServerNames
-config['vhost']['port'] = NextFpmPort
+config['vhost']['port'] = str(NextFpmPort)
 config['vhost']['PhpVersion'] = PhpVersion
 
 with open( 'databases/vhosts/' + FileName[0] +'.ini', 'w') as configfile:
     config.write(configfile)
 
-NextFpmPort = int(NextFpmPort) + 1
-agent.set_env("NextFpmPort", NextFpmPort)
 # Make sure everything is saved inside the environment file
 # just before starting systemd unit
 agent.dump_env()
 
 # we need to create the webroot folder for the website
 subprocess.run(["podman","exec","-i","nginx","mkdir","-p","/usr/share/nginx/html/"+FileName[0]])
-
