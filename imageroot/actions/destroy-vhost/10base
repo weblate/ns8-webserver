@@ -4,7 +4,7 @@ import os
 import shutil
 import json
 import sys
-
+import subprocess
 
 
 # Try to parse the stdin as JSON.
@@ -13,14 +13,11 @@ data = json.load(sys.stdin)
 
 ServerNames = data.get("ServerNames").split(',')
 MODULE_ID = os.environ["MODULE_ID"]
-AGENT_STATE_DIR = os.environ["AGENT_STATE_DIR"]
 
 # remove the database configuration
-path = databases/vhosts/' + ServerNames[0] +'.ini'
+path = 'databases/vhosts/' + ServerNames[0] +'.ini'
 if os.path.exists(path):
     os.remove(path)
 
 # we need to remove the webroot folder for the website
-path='/home/' + MODULE_ID +'/.local/share/containers/storage/volumes/websites/_data/' + ServerNames[0]
-if os.path.isdir(path):
-    shutil.rmtree(path)
+subprocess.run(["podman","exec","-i","nginx","rm","-rf","/usr/share/nginx/html/"+ServerNames[0]])

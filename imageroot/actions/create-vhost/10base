@@ -1,12 +1,30 @@
 #!/usr/bin/env python3
-
+#
+# Copyright (C) 2022 Nethesis S.r.l.
+# http://www.nethesis.it - nethserver@nethesis.it
+#
+# This script is part of NethServer.
+#
+# NethServer is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License,
+# or any later version.
+#
+# NethServer is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with NethServer.  If not, see COPYING.
+#
 import configparser
 import os
 import json
 import sys
 # agent is a NethServer library which provides function to communicate with the agent
 import agent
-#  {"wiki_name": "mywiki", "username": "admin", "password": "admin", "email": "admin@test.local", "user_full_name": "Administrator"}
+
 config = configparser.ConfigParser()
 # Try to parse the stdin as JSON.
 # If parsing fails, output everything to stderr
@@ -17,7 +35,7 @@ ServerNames = data.get("ServerNames")
 PhpVersion = data.get("PhpVersion")
 NextFpmPort = os.environ["NextFpmPort"]
 MODULE_ID = os.environ["MODULE_ID"]
-AGENT_STATE_DIR = os.environ["AGENT_STATE_DIR"]
+
 config['vhost'] = {}
 config['vhost']['ServerNames'] = ServerNames
 config['vhost']['port'] = NextFpmPort
@@ -33,6 +51,5 @@ agent.set_env("NextFpmPort", NextFpmPort)
 agent.dump_env()
 
 # we need to create the webroot folder for the website
-path='/home/' + MODULE_ID +'/.local/share/containers/storage/volumes/websites/_data/' + FileName[0]
-if not os.path.isdir(path):
-    os.mkdir(path)
+subprocess.run(["podman","exec","-i","nginx","mkdir","-p","/usr/share/nginx/html/"+FileName[0]])
+
