@@ -13,7 +13,6 @@ ExecStartPre=%h/.config/bin/expand-vhosts
 ExecStart=/usr/bin/podman run --conmon-pidfile %t/nginx.pid \
     --cidfile %t/nginx.ctr-id --cgroups=no-conmon \
     --pod-id-file %t/webserver.pod-id --replace -d --name  nginx \
-    --env-file=%S/state/environment \
     --volume ./conf.d:/etc/nginx/conf.d:z --volume websites:/usr/share/nginx/html:Z \
     docker.io/nginx:1.20.2
 ExecStop=/usr/bin/podman stop --ignore --cidfile %t/nginx.ctr-id -t 10
