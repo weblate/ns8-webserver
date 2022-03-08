@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env python3
 
 #
 # Copyright (C) 2022 Nethesis S.r.l.
@@ -19,3 +19,35 @@
 # You should have received a copy of the GNU General Public License
 # along with NethServer.  If not, see COPYING.
 #
+
+import os
+import glob
+import configparser
+import json
+import sys
+import agent
+import agent.tasks
+
+path="databases/vhosts/*"
+for file in glob.iglob(path, recursive=True):
+    config = configparser.ConfigParser()
+    config.read(file)
+    ServerNames = config['vhost']['ServerNames'].split(',')
+    for host in ServerNames:
+        # Find default traefik instance for current node
+        default_traefik_id = agent.resolve_agent_id('traefik@node')
+        if default_traefik_id is None:
+            sys.exit(2)
+
+        # remove traefik virtual host
+        response = agent.tasks.run(
+            agent_id=default_traefik_id,
+            action='delete-route',
+            data={
+                'instance': os.environ['MODULE_ID'] + '-' + host
+            },
+        )
+
+        # Check if traefik configuration has been successfull
+        agent.assert_exp(response['exit_code'] == 0)
+
