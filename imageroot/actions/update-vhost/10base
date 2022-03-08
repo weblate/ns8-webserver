@@ -1,0 +1,57 @@
+#!/usr/bin/env python3
+#
+# Copyright (C) 2022 Nethesis S.r.l.
+# http://www.nethesis.it - nethserver@nethesis.it
+#
+# This script is part of NethServer.
+#
+# NethServer is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License,
+# or any later version.
+#
+# NethServer is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with NethServer.  If not, see COPYING.
+#
+import configparser
+import os
+import json
+import sys
+import subprocess
+
+# agent is a NethServer library which provides function to communicate with the agent
+import agent
+
+config = configparser.ConfigParser()
+# Try to parse the stdin as JSON.
+# If parsing fails, output everything to stderr
+data = json.load(sys.stdin)
+
+ServerNames = data.get("ServerNames")
+PhpVersion = data.get("PhpVersion")
+MODULE_ID = os.environ["MODULE_ID"]
+
+with open("databases/NextFpmPort", "r+") as fp:
+    NextFpmPort = int(fp.read() or "9100") + 1
+    fp.seek(0)
+    fp.write(str(NextFpmPort))
+
+config['vhost'] = {}
+config['vhost']['ServerNames'] = ','.join(ServerNames)
+config['vhost']['port'] = str(NextFpmPort)
+config['vhost']['PhpVersion'] = PhpVersion
+
+with open( 'databases/vhosts/' + ServerNames[0] +'.ini', 'w') as configfile:
+    config.write(configfile)
+
+# Make sure everything is saved inside the environment file
+# just before starting systemd unit
+agent.dump_env()
+
+# we need to create the webroot folder for the website
+subprocess.run(["podman","exec","-i","nginx","mkdir","-p","/usr/share/nginx/html/"+ServerNames[0]])
