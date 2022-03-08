@@ -9,7 +9,7 @@ WorkingDirectory=%S/state
 Restart=always
 TimeoutStopSec=70
 ExecStartPre=/bin/rm -f %t/nginx.pid %t/nginx.ctr-id
-ExecStartPre=%h/.config/bin/expand-vhosts
+ExecStartPre=/usr/local/bin/runagent expand-vhosts
 ExecStart=/usr/bin/podman run --conmon-pidfile %t/nginx.pid \
     --cidfile %t/nginx.ctr-id --cgroups=no-conmon \
     --pod-id-file %t/webserver.pod-id --replace -d --name  nginx \

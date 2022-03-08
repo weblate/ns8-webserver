@@ -53,10 +53,10 @@ for file in glob.iglob(path, recursive=True):
 
     json_properties = json.dumps(properties)
     file = open("conf.d/dyn-"+servernames[0]+".conf","w")
-    subprocess.run(["/usr/local/bin/runagent","expand-template","vhost-nginx.conf",json_properties],stdout=file)
+    subprocess.run(["expand-template","vhost-nginx.conf",json_properties],stdout=file)
     file.close()
 
     if phpversion:
         file = open("php"+phpversion+"-fpm-custom.d/dyn-"+servernames[0]+".conf", "w")
-        subprocess.run(["/usr/local/bin/runagent","expand-template","php-fpm-pool.conf",json_properties],stdout=file)
+        subprocess.run(["expand-template","php-fpm-pool.conf",json_properties],stdout=file)
         file.close()
