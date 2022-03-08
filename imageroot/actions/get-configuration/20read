@@ -20,10 +20,24 @@
 # along with NethServer.  If not, see COPYING.
 #
 
+import os
+import glob
+import configparser
 import json
 import sys
-import agent
 
-config = {}
+configuration = {}
 
-json.dump(config, fp=sys.stdout)
+path="databases/vhosts/*"
+for file in glob.iglob(path, recursive=True):
+    config = configparser.ConfigParser()
+    config.read(file)
+    ServerNames = config['vhost']['ServerNames'].split(',')
+    vhost = {
+        "ServerNames" : ServerNames,
+        "Port" : config['vhost']['port'],
+        "PhpVersion" : config['vhost']['PhpVersion'],
+    }
+    configuration[ServerNames[0]] = vhost
+
+json.dump(configuration, fp=sys.stdout)
