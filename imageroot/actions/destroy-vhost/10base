@@ -11,7 +11,7 @@ import subprocess
 # If parsing fails, output everything to stderr
 data = json.load(sys.stdin)
 
-ServerNames = data.get("ServerNames").split(',')
+ServerNames = data.get("ServerNames")
 MODULE_ID = os.environ["MODULE_ID"]
 
 # remove the database configuration

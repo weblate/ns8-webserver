@@ -32,7 +32,7 @@ import agent.tasks
 data = json.load(sys.stdin)
 
 # Setup default values
-servernames = data.get("ServerNames").split(',')
+servernames = data.get("ServerNames")
 h2hs = data.get("http2https", True)
 le = data.get("lets_encrypt", True)
 

@@ -32,7 +32,6 @@ config = configparser.ConfigParser()
 # If parsing fails, output everything to stderr
 data = json.load(sys.stdin)
 
-FileName = data.get("ServerNames").split(',')
 ServerNames = data.get("ServerNames")
 PhpVersion = data.get("PhpVersion")
 MODULE_ID = os.environ["MODULE_ID"]
@@ -43,11 +42,11 @@ with open("databases/NextFpmPort", "r+") as fp:
     fp.write(str(NextFpmPort))
 
 config['vhost'] = {}
-config['vhost']['ServerNames'] = ServerNames
+config['vhost']['ServerNames'] = ','.join(ServerNames)
 config['vhost']['port'] = str(NextFpmPort)
 config['vhost']['PhpVersion'] = PhpVersion
 
-with open( 'databases/vhosts/' + FileName[0] +'.ini', 'w') as configfile:
+with open( 'databases/vhosts/' + ServerNames[0] +'.ini', 'w') as configfile:
     config.write(configfile)
 
 # Make sure everything is saved inside the environment file
@@ -55,4 +54,4 @@ with open( 'databases/vhosts/' + FileName[0] +'.ini', 'w') as configfile:
 agent.dump_env()
 
 # we need to create the webroot folder for the website
-subprocess.run(["podman","exec","-i","nginx","mkdir","-p","/usr/share/nginx/html/"+FileName[0]])
+subprocess.run(["podman","exec","-i","nginx","mkdir","-p","/usr/share/nginx/html/"+ServerNames[0]])
