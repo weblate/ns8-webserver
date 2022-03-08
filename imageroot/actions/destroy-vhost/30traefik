@@ -32,9 +32,9 @@ import agent.tasks
 data = json.load(sys.stdin)
 
 # Setup default values
-servernames = data.get("ServerNames")
+ServerNames = data.get("ServerNames")
 
-for host in servernames:
+for host in ServerNames:
     # Find default traefik instance for current node
     default_traefik_id = agent.resolve_agent_id('traefik@node')
     if default_traefik_id is None:

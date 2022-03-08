@@ -39,24 +39,24 @@ path="databases/vhosts/*"
 for file in glob.iglob(path, recursive=True):
     config = configparser.ConfigParser()
     config.read(file)
-    servernames = config['vhost']['servernames'].split(',')
+    ServerNames = config['vhost']['ServerNames'].split(',')
     port = config['vhost']['port']
     phpversion = config['vhost']['phpversion']
     s = ' '
 
     properties = {
-    "names": s.join(servernames),
-    "rootFolder": servernames[0],
+    "names": s.join(ServerNames),
+    "rootFolder": ServerNames[0],
     "port": port,
     "phpversion": phpversion
     }
 
     json_properties = json.dumps(properties)
-    file = open("conf.d/dyn-"+servernames[0]+".conf","w")
+    file = open("conf.d/dyn-"+ServerNames[0]+".conf","w")
     subprocess.run(["expand-template","vhost-nginx.conf",json_properties],stdout=file)
     file.close()
 
     if phpversion:
-        file = open("php"+phpversion+"-fpm-custom.d/dyn-"+servernames[0]+".conf", "w")
+        file = open("php"+phpversion+"-fpm-custom.d/dyn-"+ServerNames[0]+".conf", "w")
         subprocess.run(["expand-template","php-fpm-pool.conf",json_properties],stdout=file)
         file.close()
