@@ -1,0 +1,25 @@
+[Unit]
+Description=Podman  php%i-fpm.service
+BindsTo=webserver.service
+After=nginx.service
+
+[Service]
+Environment=PODMAN_SYSTEMD_UNIT=%n
+EnvironmentFile=%S/state/environment
+WorkingDirectory=%S/state
+Restart=always
+TimeoutStopSec=70
+ExecStartPre=/bin/rm -f %t/php%i-fpm.pid %t/php%i-fpm.ctr-id
+ExecStart=/usr/bin/podman run --conmon-pidfile %t/php%i-fpm.pid \
+    --cidfile %t/php%i-fpm.ctr-id --cgroups=no-conmon \
+    --pod-id-file %t/webserver.pod-id --replace -d --name  php%i-fpm \
+    --volume websites:/app:z --volume ./php%i-fpm-custom.d:/opt/bitnami/php/etc/php-fpm.d:Z \
+    --volume %S/etc/phpfpm-%i.conf:/opt/bitnami/php/etc/php-fpm.d/www.conf:Z \
+    docker.io/bitnami/php-fpm:%i
+ExecStop=/usr/bin/podman stop --ignore --cidfile %t/php%i-fpm.ctr-id -t 10
+ExecStopPost=/usr/bin/podman rm --ignore -f --cidfile %t/php%i-fpm.ctr-id
+PIDFile=%t/php%i-fpm.pid
+Type=forking
+
+[Install]
+WantedBy=default.target

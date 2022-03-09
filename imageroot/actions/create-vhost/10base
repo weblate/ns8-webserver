@@ -55,3 +55,7 @@ agent.dump_env()
 
 # we need to create the webroot folder for the website
 subprocess.run(["podman","exec","-i","nginx","mkdir","-p","/usr/share/nginx/html/"+ServerNames[0]])
+
+# if the phpversion exists we download and install the container
+if PhpVersion:
+    subprocess.run(["systemctl", "--user", "enable", "--now", "phpfpm@"+PhpVersion+".service"])

@@ -5,8 +5,8 @@
 
 [Unit]
 Description=Podman webserver.service
-Requires=php8.1-fpm.service php8.0-fpm.service php7.4-fpm.service nginx.service
-Before=php8.1-fpm.service php8.0-fpm.service php7.4-fpm.service nginx.service
+Requires=nginx.service
+Before=nginx.service
 
 [Service]
 Environment=PODMAN_SYSTEMD_UNIT=%n
