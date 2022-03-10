@@ -10,11 +10,11 @@ WorkingDirectory=%S/state
 Restart=always
 TimeoutStopSec=70
 ExecStartPre=/bin/rm -f %t/php%i-fpm.pid %t/php%i-fpm.ctr-id
+ExecStartPre=/usr/bin/mkdir -p %S/state/php%i-fpm-custom.d
 ExecStart=/usr/bin/podman run --conmon-pidfile %t/php%i-fpm.pid \
     --cidfile %t/php%i-fpm.ctr-id --cgroups=no-conmon \
     --pod-id-file %t/webserver.pod-id --replace -d --name  php%i-fpm \
-    --volume websites:/app:z --volume ./php%i-fpm-custom.d:/opt/bitnami/php/etc/php-fpm.d:Z \
-    --volume %S/etc/phpfpm-%i.conf:/opt/bitnami/php/etc/php-fpm.d/www.conf:Z \
+    --volume websites:/app:z --volume %S/state/php%i-fpm-custom.d:/opt/bitnami/php/etc/php-fpm.d:Z \
     docker.io/bitnami/php-fpm:%i
 ExecStop=/usr/bin/podman stop --ignore --cidfile %t/php%i-fpm.ctr-id -t 10
 ExecReload=/usr/bin/podman kill -s USR2 php%i-fpm
