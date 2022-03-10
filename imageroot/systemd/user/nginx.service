@@ -16,6 +16,8 @@ ExecStart=/usr/bin/podman run --conmon-pidfile %t/nginx.pid \
     --volume ./conf.d:/etc/nginx/conf.d:z --volume websites:/usr/share/nginx/html:Z \
     docker.io/nginx:1.20.2
 ExecStop=/usr/bin/podman stop --ignore --cidfile %t/nginx.ctr-id -t 10
+ExecReload=/usr/local/bin/runagent expand-vhosts
+ExecReload=/usr/bin/podman kill -s HUP nginx
 ExecStopPost=/usr/bin/podman rm --ignore -f --cidfile %t/nginx.ctr-id
 PIDFile=%t/nginx.pid
 Type=forking
