@@ -45,11 +45,11 @@ config['vhost']['ServerNames'] = ','.join(ServerNames)
 config['vhost']['port'] = str(NextFpmPort)
 config['vhost']['PhpVersion'] = PhpVersion
 
-with open( 'databases/vhosts/' + ServerNames[0] +'.ini', 'w') as configfile:
+with open( 'databases/vhosts/' + str(NextFpmPort)+'.ini', 'w') as configfile:
     config.write(configfile)
 
 # we need to create the webroot folder for the website
-subprocess.run(["podman","exec","-i","nginx","mkdir","-p","/usr/share/nginx/html/"+ServerNames[0]])
+subprocess.run(["podman","exec","-i","nginx","mkdir","-p","/usr/share/nginx/html/"+str(NextFpmPort)])
 
 # if the phpversion exists we download and install the container
 if PhpVersion:

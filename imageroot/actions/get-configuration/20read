@@ -38,6 +38,6 @@ for file in glob.iglob(path, recursive=True):
         "Port" : config['vhost']['port'],
         "PhpVersion" : config['vhost']['PhpVersion'],
     }
-    configuration[ServerNames[0]] = vhost
+    configuration[config['vhost']['port']] = vhost
 
 json.dump(configuration, fp=sys.stdout)

@@ -46,17 +46,17 @@ for file in glob.iglob(path, recursive=True):
 
     properties = {
     "names": s.join(ServerNames),
-    "rootFolder": ServerNames[0],
+    "WebRoot": port,
     "port": port,
     "phpversion": phpversion
     }
 
     json_properties = json.dumps(properties)
-    file = open("conf.d/dyn-"+ServerNames[0]+".conf","w")
+    file = open("conf.d/dyn-"+port+".conf","w")
     subprocess.run(["expand-template","vhost-nginx.conf",json_properties],stdout=file)
     file.close()
 
     if phpversion:
-        file = open("php"+phpversion+"-fpm-custom.d/dyn-"+ServerNames[0]+".conf", "w")
+        file = open("php"+phpversion+"-fpm-custom.d/dyn-"+port+".conf", "w")
         subprocess.run(["expand-template","php-fpm-pool.conf",json_properties],stdout=file)
         file.close()
