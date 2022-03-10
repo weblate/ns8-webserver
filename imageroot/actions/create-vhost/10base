@@ -36,7 +36,7 @@ ServerNames = data.get("ServerNames")
 PhpVersion = data.get("PhpVersion")
 
 with open("databases/NextFpmPort", "r+") as fp:
-    NextFpmPort = int(fp.read() or "9100") + 1
+    NextFpmPort = int(fp.read() or "9000") + 1
     fp.seek(0)
     fp.write(str(NextFpmPort))
 
