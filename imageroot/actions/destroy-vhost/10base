@@ -12,7 +12,6 @@ import subprocess
 data = json.load(sys.stdin)
 
 ServerNames = data.get("ServerNames")
-MODULE_ID = os.environ["MODULE_ID"]
 
 # remove the database configuration
 path = 'databases/vhosts/' + ServerNames[0] +'.ini'

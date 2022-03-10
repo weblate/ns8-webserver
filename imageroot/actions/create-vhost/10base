@@ -34,7 +34,6 @@ data = json.load(sys.stdin)
 
 ServerNames = data.get("ServerNames")
 PhpVersion = data.get("PhpVersion")
-MODULE_ID = os.environ["MODULE_ID"]
 
 with open("databases/NextFpmPort", "r+") as fp:
     NextFpmPort = int(fp.read() or "9100") + 1
@@ -48,10 +47,6 @@ config['vhost']['PhpVersion'] = PhpVersion
 
 with open( 'databases/vhosts/' + ServerNames[0] +'.ini', 'w') as configfile:
     config.write(configfile)
-
-# Make sure everything is saved inside the environment file
-# just before starting systemd unit
-agent.dump_env()
 
 # we need to create the webroot folder for the website
 subprocess.run(["podman","exec","-i","nginx","mkdir","-p","/usr/share/nginx/html/"+ServerNames[0]])
