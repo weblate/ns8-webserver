@@ -22,4 +22,4 @@
 
 # If the control reaches this step, the service can be enabled and started
 
-systemctl --user restart webserver.service
+systemctl --user reload nginx.service phpfpm@\*.service
