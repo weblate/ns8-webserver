@@ -27,16 +27,14 @@ import json
 import sys
 import subprocess
 
-dir = 'conf.d/dyn-*'
-for file in glob.iglob(dir, recursive=True):
+for file in glob.iglob("conf.d/dyn-*.conf"):
     os.remove(file)
 
-dir = 'php*-fpm-custom.d/dyn-*'
-for file in glob.iglob(dir, recursive=True):
+for file in glob.iglob("php*-fpm-custom.d/dyn-*.conf"):
     os.remove(file)
 
 path="databases/vhosts/*"
-for file in glob.iglob(path, recursive=True):
+for file in glob.iglob("databases/vhosts/*.ini"):
     config = configparser.ConfigParser()
     config.read(file)
     ServerNames = config['vhost']['ServerNames'].split(',')

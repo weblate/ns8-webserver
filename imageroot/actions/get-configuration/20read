@@ -28,8 +28,7 @@ import sys
 
 configuration = {}
 
-path="databases/vhosts/*"
-for file in glob.iglob(path, recursive=True):
+for file in glob.iglob("databases/vhosts/*.ini"):
     config = configparser.ConfigParser()
     config.read(file)
     ServerNames = config['vhost']['ServerNames'].split(',')
