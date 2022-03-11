@@ -20,7 +20,6 @@ ExecStartPre=/usr/bin/podman pod create --infra-conmon-pidfile %t/webserver.pid 
     --replace
 ExecStart=/usr/bin/podman pod start --pod-id-file %t/webserver.pod-id
 ExecStop=/usr/bin/podman pod stop --ignore --pod-id-file %t/webserver.pod-id -t 10
-ExecReload=/usr/local/bin/runagent reload-configuration
 ExecStopPost=/usr/bin/podman pod rm --ignore -f --pod-id-file %t/webserver.pod-id
 PIDFile=%t/webserver.pid
 Type=forking
