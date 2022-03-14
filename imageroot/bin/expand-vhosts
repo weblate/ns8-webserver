@@ -26,6 +26,7 @@ import configparser
 import json
 import sys
 import subprocess
+from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 for file in glob.iglob("conf.d/dyn-*.conf"):
     os.remove(file)
@@ -33,7 +34,12 @@ for file in glob.iglob("conf.d/dyn-*.conf"):
 for file in glob.iglob("php*-fpm-custom.d/dyn-*.conf"):
     os.remove(file)
 
-path="databases/vhosts/*"
+jenv = Environment(
+    loader=FileSystemLoader(os.getenv("AGENT_INSTALL_DIR")+"/templates"),
+    autoescape=select_autoescape(),
+    keep_trailing_newline=True,
+)
+
 for file in glob.iglob("databases/vhosts/*.ini"):
     config = configparser.ConfigParser()
     config.read(file)
@@ -50,11 +56,14 @@ for file in glob.iglob("databases/vhosts/*.ini"):
     }
 
     json_properties = json.dumps(properties)
-    file = open("conf.d/dyn-"+port+".conf","w")
-    subprocess.run(["expand-template","vhost-nginx.conf",json_properties],stdout=file)
-    file.close()
+
+    template = jenv.get_template('vhost-nginx.conf')
+    output = template.render(json.loads(json_properties))
+    with open("conf.d/dyn-"+str(port)+".conf","w") as f:
+        f.write(output)
 
     if phpversion:
-        file = open("php"+phpversion+"-fpm-custom.d/dyn-"+port+".conf", "w")
-        subprocess.run(["expand-template","php-fpm-pool.conf",json_properties],stdout=file)
-        file.close()
+        template = jenv.get_template('php-fpm-pool.conf')
+        output = template.render(json.loads(json_properties))
+        with open("php"+str(phpversion)+"-fpm-custom.d/dyn-"+str(port)+".conf", "w") as f:
+            f.write(output)
