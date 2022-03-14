@@ -18,30 +18,17 @@
 # You should have received a copy of the GNU General Public License
 # along with NethServer.  If not, see COPYING.
 #
-
 import os
-import shutil
 import json
 import sys
-import subprocess
 import glob
 
-# Try to parse the stdin as JSON.
-# If parsing fails, output everything to stderr
 data = json.load(sys.stdin)
 
-ServerNames = data.get("ServerNames")
 port = data.get('port')
+PhpVersion = data.get("PhpVersion")
 
-
-path="databases/vhosts/"+str(port)+".ini"
-if os.path.exists(path):
-    os.remove(path)
-
-# we need to remove the webroot folder for the website
-subprocess.run(["podman","exec","-i","nginx","rm","-rf","/usr/share/nginx/html/"+str(port)])
-
-#Remove php-fpm customisation
+#Remove php-fpm customisation, we need to be sure the container has created the php-fpm folder
 files = glob.glob("php*-fpm-custom.d/dyn-"+str(port)+".custom")
 for file in files:
-    os.remove(file)
+    os.rename(file,"php"+str(PhpVersion)+"-fpm-custom.d/dyn-"+str(port)+".custom")
