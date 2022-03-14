@@ -1,5 +1,4 @@
 #!/bin/bash
-
 #
 # Copyright (C) 2022 Nethesis S.r.l.
 # http://www.nethesis.it - nethserver@nethesis.it
@@ -20,6 +19,10 @@
 # along with NethServer.  If not, see COPYING.
 #
 
-# If the control reaches this step, the service can be enabled and started
+# First reload nginx to expand-template the configuration
+systemctl --user reload nginx.service
 
-systemctl --user reload nginx.service phpfpm@\*.service
+
+# restart all php-fpm services, reload is not enough to stop containers without pool configuration
+systemctl --user restart phpfpm@\*.service
+

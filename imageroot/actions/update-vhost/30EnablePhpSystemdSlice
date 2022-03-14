@@ -18,35 +18,19 @@
 # You should have received a copy of the GNU General Public License
 # along with NethServer.  If not, see COPYING.
 #
-import configparser
 import os
 import json
 import sys
 import subprocess
 
-# agent is a NethServer library which provides function to communicate with the agent
-import agent
-
-config = configparser.ConfigParser()
 # Try to parse the stdin as JSON.
 # If parsing fails, output everything to stderr
 data = json.load(sys.stdin)
 
-ServerNames = data.get("ServerNames")
 PhpVersion = data.get("PhpVersion")
 
-with open("databases/NextFpmPort", "r+") as fp:
-    NextFpmPort = int(fp.read() or "9000") + 1
-    fp.seek(0)
-    fp.write(str(NextFpmPort))
+# if the phpversion exists we download and install the container
+if PhpVersion:
+    subprocess.run(["systemctl", "--user", "enable", "--now", "phpfpm@"+PhpVersion+".service"])
 
-config['vhost'] = {}
-config['vhost']['ServerNames'] = ','.join(ServerNames)
-config['vhost']['port'] = str(NextFpmPort)
-config['vhost']['PhpVersion'] = PhpVersion
 
-with open( 'databases/vhosts/' + str(NextFpmPort)+'.ini', 'w') as configfile:
-    config.write(configfile)
-
-# we need to create the webroot folder for the website
-subprocess.run(["podman","exec","-i","nginx","mkdir","-p","/usr/share/nginx/html/"+str(NextFpmPort)])
