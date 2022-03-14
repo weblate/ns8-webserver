@@ -67,3 +67,5 @@ for file in glob.iglob("databases/vhosts/*.ini"):
         output = template.render(json.loads(json_properties))
         with open("php"+str(phpversion)+"-fpm-custom.d/dyn-"+str(port)+".conf", "w") as f:
             f.write(output)
+        # php-fpm expects to find its customisation file
+        open("php"+phpversion+"-fpm-custom.d/dyn-"+port+".custom", "a").close
