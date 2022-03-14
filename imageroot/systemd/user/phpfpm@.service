@@ -17,6 +17,7 @@ ExecStart=/usr/bin/podman run --conmon-pidfile %t/php%i-fpm.pid \
     --volume websites:/app:z --volume %S/state/php%i-fpm-custom.d:/opt/bitnami/php/etc/php-fpm.d:Z \
     docker.io/bitnami/php-fpm:%i
 ExecStop=/usr/bin/podman stop --ignore --cidfile %t/php%i-fpm.ctr-id -t 10
+ExecReload=/usr/bin/mkdir -p %S/state/php%i-fpm-custom.d
 ExecReload=/usr/bin/podman kill -s USR2 php%i-fpm
 ExecStopPost=/usr/bin/podman rm --ignore -f --cidfile %t/php%i-fpm.ctr-id
 PIDFile=%t/php%i-fpm.pid
