@@ -34,6 +34,12 @@ data = json.load(sys.stdin)
 
 ServerNames = data.get("ServerNames")
 PhpVersion = data.get("PhpVersion")
+MemoryLimit = data.get("MemoryLimit",'512')
+AllowUrlfOpen = data.get("AllowUrlfOpen",'enabled')
+UploadMaxFilesize = data.get("UploadMaxFilesize",'4')
+PostMaxSize = data.get("PostMaxSize",'8')
+MaxExecutionTime = data.get("MaxExecutionTime",'0')
+MaxFileUploads = data.get("MaxFileUploads",'20')
 
 with open("databases/NextFpmPort", "r+") as fp:
     NextFpmPort = int(fp.read() or "9000") + 1
@@ -44,6 +50,12 @@ config['vhost'] = {}
 config['vhost']['ServerNames'] = ','.join(ServerNames)
 config['vhost']['port'] = str(NextFpmPort)
 config['vhost']['PhpVersion'] = PhpVersion
+config['vhost']['MemoryLimit'] = MemoryLimit
+config['vhost']['AllowUrlfOpen'] = AllowUrlfOpen
+config['vhost']['UploadMaxFilesize'] = UploadMaxFilesize
+config['vhost']['PostMaxSize'] = PostMaxSize
+config['vhost']['MaxExecutionTime'] = MaxExecutionTime
+config['vhost']['MaxFileUploads'] = MaxFileUploads
 
 with open( 'databases/vhosts/' + str(NextFpmPort)+'.ini', 'w') as configfile:
     config.write(configfile)

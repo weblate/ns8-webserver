@@ -45,14 +45,26 @@ for file in glob.iglob("databases/vhosts/*.ini"):
     config.read(file)
     ServerNames = config['vhost']['ServerNames'].split(',')
     port = config['vhost']['port']
-    phpversion = config['vhost']['phpversion']
+    PhpVersion = config['vhost']['PhpVersion']
+    MemoryLimit = config['vhost']['MemoryLimit']
+    AllowUrlfOpen = config['vhost']['AllowUrlfOpen']
+    UploadMaxFilesize = config['vhost']['UploadMaxFilesize']
+    PostMaxSize = config['vhost']['PostMaxSize']
+    MaxExecutionTime = config['vhost']['MaxExecutionTime']
+    MaxFileUploads = config['vhost']['MaxFileUploads']
     s = ' '
 
     properties = {
     "names": s.join(ServerNames),
     "WebRoot": port,
     "port": port,
-    "phpversion": phpversion
+    "PhpVersion": PhpVersion,
+    "MemoryLimit": MemoryLimit,
+    "AllowUrlfOpen": AllowUrlfOpen,
+    "UploadMaxFilesize": UploadMaxFilesize,
+    "PostMaxSize": PostMaxSize,
+    "MaxExecutionTime": MaxExecutionTime,
+    "MaxFileUploads": MaxFileUploads
     }
 
     json_properties = json.dumps(properties)
@@ -62,10 +74,10 @@ for file in glob.iglob("databases/vhosts/*.ini"):
     with open("conf.d/dyn-"+str(port)+".conf","w") as f:
         f.write(output)
 
-    if phpversion:
+    if PhpVersion:
         template = jenv.get_template('php-fpm-pool.conf')
         output = template.render(json.loads(json_properties))
-        with open("php"+str(phpversion)+"-fpm-custom.d/dyn-"+str(port)+".conf", "w") as f:
+        with open("php"+str(PhpVersion)+"-fpm-custom.d/dyn-"+str(port)+".conf", "w") as f:
             f.write(output)
         # php-fpm expects to find its customisation file
-        open("php"+phpversion+"-fpm-custom.d/dyn-"+str(port)+".custom", "a").close
+        open("php"+str(PhpVersion)+"-fpm-custom.d/dyn-"+str(port)+".custom", "a").close
