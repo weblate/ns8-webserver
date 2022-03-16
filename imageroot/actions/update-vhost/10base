@@ -71,14 +71,14 @@ for host in hosts:
 # write the configuration to the database
 config['vhost'] = {}
 config['vhost']['ServerNames'] = ','.join(ServerNames)
-config['vhost']['PhpVersion'] = PhpVersion
+config['vhost']['PhpVersion'] = str(PhpVersion)
 config['vhost']['port'] = str(port)
-config['vhost']['MemoryLimit'] = MemoryLimit
-config['vhost']['AllowUrlfOpen'] = AllowUrlfOpen
-config['vhost']['UploadMaxFilesize'] = UploadMaxFilesize
-config['vhost']['PostMaxSize'] = PostMaxSize
-config['vhost']['MaxExecutionTime'] = MaxExecutionTime
-config['vhost']['MaxFileUploads'] = MaxFileUploads
+config['vhost']['MemoryLimit'] = str(MemoryLimit)
+config['vhost']['AllowUrlfOpen'] = str(AllowUrlfOpen)
+config['vhost']['UploadMaxFilesize'] = str(UploadMaxFilesize)
+config['vhost']['PostMaxSize'] = str(PostMaxSize)
+config['vhost']['MaxExecutionTime'] = str(MaxExecutionTime)
+config['vhost']['MaxFileUploads'] = str(MaxFileUploads)
 
 with open( 'databases/vhosts/' + str(port) +'.ini', 'w') as configfile:
     config.write(configfile)
