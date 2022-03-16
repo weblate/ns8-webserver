@@ -34,7 +34,7 @@ data = json.load(sys.stdin)
 # Setup default values
 servernames = data.get("ServerNames")
 h2hs = data.get("http2https", True)
-le = data.get("lets_encrypt", True)
+le = data.get("lets_encrypt", False)
 
 # Find default traefik instance for current node
 default_traefik_id = agent.resolve_agent_id('traefik@node')
