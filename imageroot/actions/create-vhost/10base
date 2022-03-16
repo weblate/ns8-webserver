@@ -49,13 +49,13 @@ with open("databases/NextFpmPort", "r+") as fp:
 config['vhost'] = {}
 config['vhost']['ServerNames'] = ','.join(ServerNames)
 config['vhost']['port'] = str(NextFpmPort)
-config['vhost']['PhpVersion'] = PhpVersion
-config['vhost']['MemoryLimit'] = MemoryLimit
+config['vhost']['PhpVersion'] = str(PhpVersion)
+config['vhost']['MemoryLimit'] = str(MemoryLimit)
 config['vhost']['AllowUrlfOpen'] = AllowUrlfOpen
-config['vhost']['UploadMaxFilesize'] = UploadMaxFilesize
-config['vhost']['PostMaxSize'] = PostMaxSize
-config['vhost']['MaxExecutionTime'] = MaxExecutionTime
-config['vhost']['MaxFileUploads'] = MaxFileUploads
+config['vhost']['UploadMaxFilesize'] = str(UploadMaxFilesize)
+config['vhost']['PostMaxSize'] = str(PostMaxSize)
+config['vhost']['MaxExecutionTime'] = str(MaxExecutionTime)
+config['vhost']['MaxFileUploads'] = str(MaxFileUploads)
 
 with open( 'databases/vhosts/' + str(NextFpmPort)+'.ini', 'w') as configfile:
     config.write(configfile)
