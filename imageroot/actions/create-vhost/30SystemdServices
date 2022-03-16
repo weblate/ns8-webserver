@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env python3
 #
 # Copyright (C) 2022 Nethesis S.r.l.
 # http://www.nethesis.it - nethserver@nethesis.it
@@ -18,11 +18,25 @@
 # You should have received a copy of the GNU General Public License
 # along with NethServer.  If not, see COPYING.
 #
+import os
+import json
+import sys
+import subprocess
 
-# First reload nginx to expand-template the configuration
-systemctl --user reload nginx.service
+# Try to parse the stdin as JSON.
+# If parsing fails, output everything to stderr
+data = json.load(sys.stdin)
 
+PhpVersion = data.get("PhpVersion")
 
-# restart all php-fpm services, reload is not enough to stop containers without pool configuration
-systemctl --user restart phpfpm@\*.service
+# if the phpversion exists we download and install the container
+if PhpVersion:
+    # build the configuration folder
+    os.makedirs('php'+str(PhpVersion)+'-fpm-custom.d', exist_ok=True)
+    # expand configuration
+    subprocess.run(["systemctl", "--user", "reload", "nginx.service"])
+    # start the container  if stopped
+    subprocess.run(["systemctl", "--user", "enable", "--now", "phpfpm@"+str(PhpVersion)+".service"])
+else:
+    subprocess.run(["systemctl", "--user", "reload", "nginx.service"])
 

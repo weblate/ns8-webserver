@@ -1,0 +1,56 @@
+#!/usr/bin/env python3
+#
+# Copyright (C) 2022 Nethesis S.r.l.
+# http://www.nethesis.it - nethserver@nethesis.it
+#
+# This script is part of NethServer.
+#
+# NethServer is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License,
+# or any later version.
+#
+# NethServer is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with NethServer.  If not, see COPYING.
+#
+import os
+import json
+import sys
+import subprocess
+import glob
+import re
+
+# Try to parse the stdin as JSON.
+# If parsing fails, output everything to stderr
+data = json.load(sys.stdin)
+
+PhpVersion = data.get("PhpVersion")
+
+# if the phpversion exists we download and install the container
+if PhpVersion:
+
+    # build the configuration folder
+    os.makedirs('php'+str(PhpVersion)+'-fpm-custom.d', exist_ok=True)
+
+    # expand configuration
+    subprocess.run(["systemctl", "--user", "reload", "nginx.service"])
+
+    # detect if a service has no configurations, hence stop or reload
+    PhpServiceArray = glob.glob('php*-fpm-custom.d')
+    for folder in PhpServiceArray:
+        ConfiguredServices = re.findall('php[0-9\.]+', folder)
+        ListConfigurations = glob.glob(folder+'/*.conf')
+        if not ListConfigurations :
+            subprocess.run(["systemctl", "--user", "disable","--now", "phpfpm@"+ConfiguredServices[0].replace('php','')+".service"])
+
+    # start the container  if stopped
+    subprocess.run(["systemctl", "--user", "enable", "--now", "phpfpm@"+str(PhpVersion)+".service"])
+    subprocess.run(["systemctl", "--user", "reload", "phpfpm@\*.service"])
+else:
+    subprocess.run(["systemctl", "--user", "reload", "nginx.service"])
+    subprocess.run(["systemctl", "--user", "reload", "phpfpm@\*.service"])

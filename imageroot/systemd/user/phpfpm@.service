@@ -2,6 +2,7 @@
 Description=Podman  php%i-fpm.service
 BindsTo=webserver.service
 After=nginx.service
+ConditionDirectoryNotEmpty=%S/state/php%i-fpm-custom.d/
 
 [Service]
 Environment=PODMAN_SYSTEMD_UNIT=%n
