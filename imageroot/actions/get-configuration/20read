@@ -34,9 +34,16 @@ for file in glob.iglob("databases/vhosts/*.ini"):
     ServerNames = config['vhost']['ServerNames'].split(',')
     vhost = {
         "ServerNames" : ServerNames,
-        "Port" : config['vhost']['port'],
+        "Port" : int(config['vhost']['port']),
         "PhpVersion" : config['vhost']['PhpVersion'],
-    }
+        "memorylimit" : int(config['vhost']['memorylimit']),
+        "allowurlfopen" : config['vhost']['allowurlfopen'],
+        "uploadmaxfilesize" : int(config['vhost']['uploadmaxfilesize']),
+        "postmaxsize" : int(config['vhost']['postmaxsize']),
+        "maxexecutiontime" : int(config['vhost']['maxexecutiontime']),
+        "maxfileuploads" : int(config['vhost']['maxfileuploads'])
+        }
+
     configuration[config['vhost']['port']] = vhost
 
 json.dump(configuration, fp=sys.stdout)
