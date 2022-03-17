@@ -5,7 +5,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    appName: "newui", // TODO
+    appName: "webserver", // TODO
     instanceName: "",
     instanceLabel: "",
     core: null,
