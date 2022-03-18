@@ -48,7 +48,7 @@
         "PhpVersion": {
             "type": "string",
             "format": "regex",
-            "pattern":"^(7.4|8.0|8.1)$",
+            "pattern":"^[0-9][.][0-9]$",
             "title": "PhpVersion",
             "description": "Could be 7.4 or 8.0 or 8.1"
         },
