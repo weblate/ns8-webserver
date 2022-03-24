@@ -23,3 +23,6 @@
 # If the control reaches this step, the service can be enabled and started
 
 systemctl --user enable --now webserver.service
+
+# be sure sftpgo.service is up before to continue
+while ! systemctl is-active --user sftpgo.service --quiet ; do sleep 1 ; done
