@@ -50,3 +50,15 @@ for file in glob.iglob("databases/vhosts/*.ini"):
         # Check if traefik configuration has been successfull
         agent.assert_exp(response['exit_code'] == 0)
 
+
+# Remove traefik route for sftpgo
+response = agent.tasks.run(
+    agent_id=default_traefik_id,
+    action='delete-route',
+    data={
+        'instance': os.environ['MODULE_ID']
+    },
+)
+
+# Check if traefik configuration has been successfull
+agent.assert_exp(response['exit_code'] == 0)
