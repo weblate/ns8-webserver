@@ -23,6 +23,9 @@ import os
 import json
 import sys
 import subprocess
+import random
+import string
+import http.client
 
 # agent is a NethServer library which provides function to communicate with the agent
 import agent
@@ -62,3 +65,37 @@ with open( 'databases/vhosts/' + str(NextFpmPort)+'.ini', 'w') as configfile:
 
 # we need to create the webroot folder for the website
 subprocess.run(["podman","exec","-i","nginx","mkdir","-p","/usr/share/nginx/html/"+str(NextFpmPort)])
+
+# we need to create the user in sftpgo
+
+f = open ('sftpgo.conf.d/API_KEY', "r")
+api_key = f.read()
+f.close()
+
+#we need to create a password to authenticate to sftpgo user
+def get_random_string(length):
+    # choose from all lowercase letter
+    letters = string.ascii_lowercase
+    result_str = ''.join(random.choice(letters) for i in range(length))
+    return result_str
+
+password = get_random_string(16)
+
+# write the key to a file and protect it
+f = open ('sftpgo.conf.d/secrets/'+str(NextFpmPort)+'.secret', "w")
+f.write(password)
+f.close()
+os.chmod('sftpgo.conf.d/secrets/'+str(NextFpmPort)+'.secret', 0o600)
+
+# connect to sftpgo api and create the user username === NextFpmPort
+conn = http.client.HTTPConnection("localhost:"+os.environ["SFTPGO_TCP_PORT"])
+
+payload = '{"id":1,"status":1,"username":"'+str(NextFpmPort)+'","expiration_date":0,"password":"'+password+'","home_dir":"/srv/sftpgo/data/'+str(NextFpmPort)+'","uid":0,"gid":0,"max_sessions":0,"quota_size":0,"quota_files":0,"permissions":{"/":["*"]},"created_at":0,"updated_at":0,"filters":{"tls_username":"None","hooks":{"external_auth_disabled":false,"pre_login_disabled":false,"check_password_disabled":false},"totp_config":{"secret":{}}},"filesystem":{"provider":0,"s3config":{"access_secret":{}},"gcsconfig":{"credentials":{}},"azblobconfig":{"account_key":{},"sas_url":{}},"cryptconfig":{"passphrase":{}},"sftpconfig":{"password":{},"private_key":{}}}}'
+
+headers = {
+    'Content-Type': "application/json",
+    'X-SFTPGO-API-KEY': api_key
+    }
+
+conn.request("POST", "/api/v2/users", payload, headers)
+
