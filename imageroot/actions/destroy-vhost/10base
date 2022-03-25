@@ -25,6 +25,7 @@ import json
 import sys
 import subprocess
 import glob
+import http.client
 
 # Try to parse the stdin as JSON.
 # If parsing fails, output everything to stderr
@@ -50,3 +51,18 @@ for file in files:
 path='sftpgo.conf.d/secrets/'+str(port)+'.secret'
 if os.path.exists(path):
     os.remove(path)
+
+# connect to sftpgo api and delete the user username === port
+# read api key
+f = open ('sftpgo.conf.d/API_KEY', "r")
+api_key = f.read()
+f.close()
+
+conn = http.client.HTTPConnection("localhost:"+os.environ["SFTPGO_TCP_PORT"])
+
+headers = {
+    'Content-Type': "application/json",
+    'X-SFTPGO-API-KEY': api_key
+    }
+
+conn.request("DELETE", "/api/v2/users/"+str(port), headers=headers)
