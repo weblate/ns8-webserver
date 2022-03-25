@@ -1,7 +1,6 @@
-#!/bin/bash
-
+#!/usr/bin/env python3
 #
-# Copyright (C) 2021 Nethesis S.r.l.
+# Copyright (C) 2022 Nethesis S.r.l.
 # http://www.nethesis.it - nethserver@nethesis.it
 #
 # This script is part of NethServer.
@@ -19,33 +18,48 @@
 # You should have received a copy of the GNU General Public License
 # along with NethServer.  If not, see COPYING.
 #
+import os
+import sys
+import json
+import agent
+import requests
+import urllib3
 
-set -e
+# retrieve json data
+data = json.load(sys.stdin)
+path=data['path']
 
-cat >&"${AGENT_COMFD}" <<EOF
-set-weight 01_validate_web_path 0
-EOF
+# remove warnings on self signed certificate 
+urllib3.disable_warnings()
 
-read -r path < <(jq -r '.path')
+# set error validation
+agent.set_weight(os.path.basename(__file__), 0)
+agent.set_weight("01_validate_web_path", 0)
 
-if [[ -n $TRAEFIK_PATH ]]; then
-    if [[ $TRAEFIK_PATH == $path ]]; then 
-        exit 0
-    # check if the webpath is already in use
-    else
-        if ! /usr/bin/curl -k -s https://127.0.0.1$path/ | grep '404' > /dev/null; then
-            jq -c -n --arg path "${path}" '[{"field":"path","parameter":"path","value":$path,"error":"webpath_already_used_in_traefik"}]'
-            echo "set-status validation-failed" >&"${AGENT_COMFD}"
-            exit 2
-        fi
-        exit 0
-    fi
-# check if the webpath is already in use
-else
-    if ! /usr/bin/curl -k -s https://127.0.0.1$path/ | grep '404' > /dev/null; then
-        jq -c -n --arg path "${path}" '[{"field":"path","parameter":"path","value":$path,"error":"webpath_already_used_in_traefik"}]'
-        echo "set-status validation-failed" >&"${AGENT_COMFD}"
-        exit 2
-    fi
-    exit 0
-fi
+# if we have the same path, lets go further
+if path == os.environ['TRAEFIK_PATH']:
+    sys.exit(0)
+
+# test on 80 with a possible redirection to 443
+response = requests.get('http://localhost'+path,verify=False)
+
+if response.status_code == 404:
+    # no path -> ok
+    sys.exit(0)
+# test 443 because 80 is prohibited (no redirection)
+elif response.status_code == 403:
+    # test on 443
+    response = requests.get('https://localhost'+path, verify=False)
+    if response.status_code == 404:
+        # no path -> ok
+        sys.exit(0)
+    else:
+        # we have found a path -> error
+        agent.set_status('validation-failed')
+        json.dump([{'field':'path','parameter':'path','value':path,'error':'webpath_already_used_in_traefik'}],fp=sys.stdout)
+        sys.exit(2)
+else:
+    # we have found a path -> error
+    agent.set_status('validation-failed')
+    json.dump([{'field':'path','parameter':'path','value':path,'error':'webpath_already_used_in_traefik'}],fp=sys.stdout)
+    sys.exit(2)
