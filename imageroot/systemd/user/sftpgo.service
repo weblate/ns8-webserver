@@ -1,5 +1,6 @@
 [Unit]
 Description=Podman  sftpgo.service
+After=nginx.service
 
 [Service]
 Environment=PODMAN_SYSTEMD_UNIT=%n
@@ -16,6 +17,7 @@ ExecStart=/usr/bin/podman run --conmon-pidfile %t/sftpgo.pid \
     --volume sftpgo_config:/var/lib/sftpgo:Z \
     --volume %S/state/sftpgo.conf.d/admin.json:/etc/sftpgo/admin.json:Z \
     --env SFTPGO_LOADDATA_FROM=/etc/sftpgo/admin.json \
+    --env SFTPGO_HTTPD__WEB_ROOT=${TRAEFIK_PATH}\
     --user 0:0 \
     ${SFTPGO_IMAGE}
 ExecStop=/usr/bin/podman stop --ignore --cidfile %t/sftpgo.ctr-id -t 10

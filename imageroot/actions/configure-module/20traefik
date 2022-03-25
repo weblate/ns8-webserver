@@ -28,9 +28,14 @@ import json
 import agent
 import agent.tasks
 
+# Try to parse the stdin as JSON.
+# If parsing fails, output everything to stderr
+data = json.load(sys.stdin)
+
 # Setup default values
-path = '/sftpgo'
-h2hs = True
+# Setup default values
+path = data.get("path")
+h2hs = data.get("http2https", True)
 
 # Talk with agent using file descriptor.
 # Setup configuration from user input.

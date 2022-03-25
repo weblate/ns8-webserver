@@ -21,7 +21,4 @@
 #
 
 # If the control reaches this step, the service can be enabled and started
-
-systemctl --user enable --now webserver.service
-systemctl --user enable --now sftpgo.service
-
+    systemctl --user restart sftpgo.service
