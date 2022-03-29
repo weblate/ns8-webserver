@@ -22,15 +22,14 @@ import os
 import sys
 import json
 import agent
-import requests
-import urllib3
+import urllib.request
+import urllib.error
+import ssl
+
 
 # retrieve json data
 data = json.load(sys.stdin)
 path=data['path']
-
-# remove warnings on self signed certificate 
-urllib3.disable_warnings()
 
 # set error validation
 agent.set_weight(os.path.basename(__file__), 0)
@@ -40,26 +39,20 @@ agent.set_weight("01_validate_web_path", 0)
 if path == os.environ['TRAEFIK_PATH']:
     sys.exit(0)
 
-# test on 80 with a possible redirection to 443
-response = requests.get('http://localhost'+path,verify=False)
+# do not verify the certificate
+ctx = ssl.create_default_context()
+ctx.check_hostname = False
+ctx.verify_mode = ssl.CERT_NONE
 
-if response.status_code == 404:
+# try to connect, 404 is an expected error that we have to manage in exeption
+try:
+    conn = urllib.request.urlopen('http://localhost'+path,context=ctx)
+except urllib.error.HTTPError as e:
     # no path -> ok
-    sys.exit(0)
-# test 443 because 80 is prohibited (no redirection)
-elif response.status_code == 403:
-    # test on 443
-    response = requests.get('https://localhost'+path, verify=False)
-    if response.status_code == 404:
-        # no path -> ok
+    if e.code == 404:
         sys.exit(0)
-    else:
-        # we have found a path -> error
-        agent.set_status('validation-failed')
-        json.dump([{'field':'path','parameter':'path','value':path,'error':'webpath_already_used_in_traefik'}],fp=sys.stdout)
-        sys.exit(2)
 else:
-    # we have found a path -> error
+    # path exists -> nok
     agent.set_status('validation-failed')
     json.dump([{'field':'path','parameter':'path','value':path,'error':'webpath_already_used_in_traefik'}],fp=sys.stdout)
     sys.exit(2)
