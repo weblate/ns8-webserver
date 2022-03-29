@@ -52,6 +52,7 @@ for file in glob.iglob("databases/vhosts/*.ini"):
     PostMaxSize = config['vhost']['PostMaxSize']
     MaxExecutionTime = config['vhost']['MaxExecutionTime']
     MaxFileUploads = config['vhost']['MaxFileUploads']
+    Indexes = config['vhost']['Indexes']
     s = ' '
 
     properties = {
@@ -64,7 +65,8 @@ for file in glob.iglob("databases/vhosts/*.ini"):
     "UploadMaxFilesize": UploadMaxFilesize,
     "PostMaxSize": PostMaxSize,
     "MaxExecutionTime": MaxExecutionTime,
-    "MaxFileUploads": MaxFileUploads
+    "MaxFileUploads": MaxFileUploads,
+    "Indexes": 'on' if Indexes == 'enabled' else 'off'
     }
 
     json_properties = json.dumps(properties)
