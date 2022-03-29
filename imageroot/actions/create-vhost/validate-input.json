@@ -18,7 +18,8 @@
         "MaxFileUploads": 20,
         "lets_encrypt": false,
         "http2https": true,
-        "Indexes": "disabled"
+        "Indexes": "disabled",
+        "status": "enabled"
     }
     ],
     "type": "object",
@@ -33,7 +34,8 @@
         "PostMaxSize",
         "MaxExecutionTime",
         "MaxFileUploads",
-        "Indexes"
+        "Indexes",
+        "status"
     ],
     "properties": {
         "ServerNames": {
@@ -57,6 +59,13 @@
             "minimum": 32,
             "title": "MemoryLimit",
             "description": "The maximum of memory allowed to the php script"
+        },
+        "status": {
+            "type": "string",
+            "format": "regex",
+            "pattern": "^(enabled|disabled)$",
+            "title": "Indexes",
+            "description": "Turn off or on the indexes"
         },
         "Indexes": {
             "type": "string",

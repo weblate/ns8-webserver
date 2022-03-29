@@ -44,6 +44,11 @@ for file in glob.iglob("databases/vhosts/*.ini"):
     config = configparser.ConfigParser()
     config.read(file)
     ServerNames = config['vhost']['ServerNames'].split(',')
+
+    status = config['vhost']['status']
+    if  status == 'disabled':
+        continue
+
     port = config['vhost']['port']
     PhpVersion = config['vhost']['PhpVersion']
     MemoryLimit = config['vhost']['MemoryLimit']
