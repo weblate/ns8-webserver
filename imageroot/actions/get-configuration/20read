@@ -41,7 +41,9 @@ for file in glob.iglob("databases/vhosts/*.ini"):
         "uploadmaxfilesize" : int(config['vhost']['uploadmaxfilesize']),
         "postmaxsize" : int(config['vhost']['postmaxsize']),
         "maxexecutiontime" : int(config['vhost']['maxexecutiontime']),
-        "maxfileuploads" : int(config['vhost']['maxfileuploads'])
+        "maxfileuploads" : int(config['vhost']['maxfileuploads']),
+        "Indexes" : config['vhost']['Indexes'],
+        "status" : config['vhost']['status']
         }
 
     configuration[config['vhost']['port']] = vhost
