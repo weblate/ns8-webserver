@@ -59,7 +59,7 @@ for host in servernames:
         action='set-route',
         data={
             'instance': os.environ['MODULE_ID']+ '-' + host,
-            'url': f'http://127.0.0.1:{os.environ["TCP_PORT"]}',
+            'url': f'http://127.0.0.1:{os.environ["NGINX_TCP_PORT"]}',
             'host': host,
             'lets_encrypt': le,
             'http2https': h2hs
