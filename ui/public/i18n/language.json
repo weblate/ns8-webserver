@@ -22,9 +22,21 @@
   },
   "settings": {
     "title": "Settings",
-    "configure_instance": "Configure {instance}",
+    "sftpgo_path": "Sftpgo web application  path",
+    "path_pattern": "Web path for the web application, like '/sftpgo'",
+    "webpath_already_used_in_traefik": "This web path is already used by another application in the web proxy.",
+    "sftp_tcp_port": "External sftp TCP port",
+    "sftp_tcp_port_tips": "This port is needed to connect a sftp client to the sftp server: sftp -P port_number user@hostname",
     "save": "Save",
-    "test_filed": "Test field"
+    "lets_encrypt": "Let's Encrypt",
+    "http_to_https": "HTTP to HTTPS",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "instance_configuration": "{instance} configuration",
+    "configuring": "Configuring...",
+    "sftpgo_url": "Sftpgo web application",
+    "link": "Link",
+    "sftpgo_login_tips": "The default login:password is admin:admin, you must change it at the first login"
   },
   "about": {
     "title": "About"

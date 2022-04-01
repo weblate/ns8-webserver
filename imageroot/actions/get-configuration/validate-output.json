@@ -5,93 +5,136 @@
     "description": "Get webserver configuration",
     "examples": [
         {
-            "9001": {
-                "PhpVersion": "7.4",
-                "ServerNames": [
-                    "toto.com",
-                    "prout.com"
-                ],
-                "MemoryLimit": 512,
-                "AllowUrlfOpen": "disabled",
-                "UploadMaxFilesize": 4,
-                "PostMaxSize": 8,
-                "MaxExecutionTime": 0,
-                "MaxFileUploads": 20,
-                "port":9001
+            "virtualhost": [
+                {
+                    "PhpVersion": "7.4",
+                    "ServerNames": [
+                        "toto.com",
+                        "prout.com"
+                    ],
+                    "MemoryLimit": 512,
+                    "AllowUrlfOpen": "disabled",
+                    "UploadMaxFilesize": 4,
+                    "PostMaxSize": 8,
+                    "MaxExecutionTime": 0,
+                    "MaxFileUploads": 20,
+                    "port": 9001,
+                    "name":"9001"
                 }
+
+            ],
+            "sftp_tcp_port": 20014,
+            "path": "/sftpgo",
+            "http2https": true
         }
     ],
     "type": "object",
     "required": [
-        "ServerNames",
-        "PhpVersion",
-        "MemoryLimit",
-        "AllowUrlfOpen",
-        "UploadMaxFilesize",
-        "PostMaxSize",
-        "MaxExecutionTime",
-        "MaxFileUploads",
-        "port"
+        "path",
+        "http2https",
+        "sftp_tcp_port",
+        "virtualhost"
     ],
     "properties": {
-        "ServerNames": {
-            "type": "array",
-            "items": {
-                "type": "string",
-                "format": "hostname"
-            },
-            "title": "ServerNames",
-            "description": "Fully qualified domain names as virtualhost."
+        "http2https": {
+            "type": "boolean",
+            "title": "HTTP to HTTPS redirection",
+            "description": "Redirect all the HTTP requests to HTTPS"
         },
-        "port": {
+        "sftp_tcp_port": {
             "type": "integer",
-            "minimum": 9001,
             "title": "port",
             "description": "The port of the phpfpm pool"
         },
-        "PhpVersion": {
+        "path": {
             "type": "string",
-            "format": "regex",
-            "pattern": "^(7.4|8.0|8.1)$",
-            "title": "PhpVersion",
-            "description": "Could be 7.4 or 8.0 or 8.1"
-        },
-        "MemoryLimit": {
-            "type": "integer",
-            "minimum": 32,
-            "title": "MemoryLimit",
-            "description": "The maximum of memory allowed to the php script"
-        },
-        "AllowUrlfOpen": {
-            "type": "string",
-            "format": "regex",
-            "pattern": "^(enabled|disabled)$",
-            "title": "AllowUrlfOpen",
-            "description": "Turn off or on the AllowUrlfOpen"
-        },
-        "UploadMaxFilesize": {
-            "type": "integer",
-            "minimum": 4,
-            "title": "UploadMaxFilesize",
-            "description": "The maximum of UploadMaxFilesize allowed to the php script"
-        },
-        "PostMaxSize": {
-            "type": "integer",
-            "minimum": 8,
-            "title": "PostMaxSize",
-            "description": "The maximum of PostMaxSize allowed to the php script"
-        },
-        "MaxExecutionTime": {
-            "type": "integer",
-            "minimum": 0,
-            "title": "MaxExecutionTime",
-            "description": "The maximum of MaxExecutionTime allowed to the php script"
-        },
-        "MaxFileUploads": {
-            "type": "integer",
-            "minimum": 20,
-            "title": "MaxFileUploads",
-            "description": "The maximum of MaxFileUploads allowed to the php script"
+            "description": "web path for the web application, like '/sftpgo'",
+            "pattern": "^/[a-zA-Z0-9]+"
+        }
+    },
+    "virtualhost": {
+        "type": "array",
+        "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "ServerNames",
+                "PhpVersion",
+                "MemoryLimit",
+                "AllowUrlfOpen",
+                "UploadMaxFilesize",
+                "PostMaxSize",
+                "MaxExecutionTime",
+                "MaxFileUploads",
+                "port",
+                "name"
+            ],
+            "items": {
+                "properties": {
+                    "ServerNames": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "format": "hostname"
+                        },
+                        "title": "ServerNames",
+                        "description": "Fully qualified domain names as virtualhost."
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "port": {
+                        "type": "integer",
+                        "minimum": 9001,
+                        "title": "port",
+                        "description": "The port of the phpfpm pool"
+                    },
+                    "PhpVersion": {
+                        "type": "string",
+                        "format": "regex",
+                        "pattern": "(^[0-9][.][0-9]$|^$)",
+                        "title": "PhpVersion",
+                        "description": "Could be 7.4 or 8.0 or 8.1 or ''"
+                    },
+                    "MemoryLimit": {
+                        "type": "integer",
+                        "minimum": 32,
+                        "title": "MemoryLimit",
+                        "description": "The maximum of memory allowed to the php script"
+                    },
+                    "AllowUrlfOpen": {
+                        "type": "string",
+                        "format": "regex",
+                        "pattern": "^(enabled|disabled)$",
+                        "title": "AllowUrlfOpen",
+                        "description": "Turn off or on the AllowUrlfOpen"
+                    },
+                    "UploadMaxFilesize": {
+                        "type": "integer",
+                        "minimum": 4,
+                        "title": "UploadMaxFilesize",
+                        "description": "The maximum of UploadMaxFilesize allowed to the php script"
+                    },
+                    "PostMaxSize": {
+                        "type": "integer",
+                        "minimum": 8,
+                        "title": "PostMaxSize",
+                        "description": "The maximum of PostMaxSize allowed to the php script"
+                    },
+                    "MaxExecutionTime": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "title": "MaxExecutionTime",
+                        "description": "The maximum of MaxExecutionTime allowed to the php script"
+                    },
+                    "MaxFileUploads": {
+                        "type": "integer",
+                        "minimum": 20,
+                        "title": "MaxFileUploads",
+                        "description": "The maximum of MaxFileUploads allowed to the php script"
+                    }
+                }
+            }
         }
     }
 }
