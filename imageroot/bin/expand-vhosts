@@ -58,10 +58,9 @@ for file in glob.iglob("databases/vhosts/*.ini"):
     MaxExecutionTime = config['vhost']['MaxExecutionTime']
     MaxFileUploads = config['vhost']['MaxFileUploads']
     Indexes = config['vhost']['Indexes']
-    s = ' '
 
     properties = {
-    "names": s.join(ServerNames),
+    "names": ' '.join(ServerNames),
     "WebRoot": port,
     "port": port,
     "PhpVersion": PhpVersion,
