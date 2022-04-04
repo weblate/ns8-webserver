@@ -1,19 +1,17 @@
 {
-  "name": "WebServer",
+  "name": "Webserver",
   "description": {
-    "en": "WebServer with PHP support"
+    "en": "Install a nginx server with php-fpm"
   },
-  "categories": [
-    "database"
-  ],
+  "categories": [],
   "authors": [
     {
-      "name": "Stephane de Labrusse",
+      "name": "stephane de Labrusse",
       "email": "stephdl@de-labrusse.fr"
     }
   ],
   "docs": {
-    "documentation_url": "",
+    "documentation_url": "https://github.com/NethServer/ns8-webserver/blob/main/README.md",
     "bug_url": "https://github.com/NethServer/dev",
     "code_url": "https://github.com/NethServer/ns8-webserver"
   },

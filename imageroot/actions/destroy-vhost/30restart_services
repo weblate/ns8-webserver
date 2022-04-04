@@ -1,5 +1,4 @@
-#!/bin/bash
-
+#!/usr/bin/env python3
 #
 # Copyright (C) 2022 Nethesis S.r.l.
 # http://www.nethesis.it - nethserver@nethesis.it
@@ -19,7 +18,23 @@
 # You should have received a copy of the GNU General Public License
 # along with NethServer.  If not, see COPYING.
 #
+import os
+import sys
+import subprocess
+import glob
+import re
 
-# If the control reaches this step, the service can be enabled and started
 
-systemctl --user enable --now webserver.service
+# expand configuration
+subprocess.run(["systemctl", "--user", "reload", "nginx.service"])
+
+# detect if a service has no configurations, hence stop or reload
+PhpServiceArray = glob.glob('php*-fpm-custom.d')
+for folder in PhpServiceArray:
+    ConfiguredServices = re.findall('php[0-9\.]+', folder)
+    ListConfigurations = glob.glob(folder+'/*.conf')
+    if not ListConfigurations :
+        subprocess.run(["systemctl", "--user", "disable","--now", "phpfpm@"+ConfiguredServices[0].replace('php','')+".service"])
+
+# reload the containers
+subprocess.run(["systemctl", "--user", "reload", "phpfpm@\*.service"])

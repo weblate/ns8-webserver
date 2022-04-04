@@ -1,0 +1,27 @@
+[Unit]
+Description=Podman  nginx.service
+BindsTo=webserver.service
+
+[Service]
+Environment=PODMAN_SYSTEMD_UNIT=%n
+EnvironmentFile=%S/state/environment
+WorkingDirectory=%S/state
+Restart=always
+TimeoutStopSec=70
+ExecStartPre=/bin/rm -f %t/nginx.pid %t/nginx.ctr-id
+ExecStartPre=/usr/local/bin/runagent expand-vhosts
+ExecStart=/usr/bin/podman run --conmon-pidfile %t/nginx.pid \
+    --cidfile %t/nginx.ctr-id --cgroups=no-conmon \
+    --pod-id-file %t/webserver.pod-id --replace -d --name  nginx \
+    --volume ./conf.d:/etc/nginx/conf.d:z --volume websites:/usr/share/nginx/html:Z \
+    --volume logs:/var/log/nginx/:z \
+    ${NGINX_IMAGE}
+ExecStop=/usr/bin/podman stop --ignore --cidfile %t/nginx.ctr-id -t 10
+ExecReload=/usr/local/bin/runagent expand-vhosts
+ExecReload=/usr/bin/podman kill -s HUP nginx
+ExecStopPost=/usr/bin/podman rm --ignore -f --cidfile %t/nginx.ctr-id
+PIDFile=%t/nginx.pid
+Type=forking
+
+[Install]
+WantedBy=default.target

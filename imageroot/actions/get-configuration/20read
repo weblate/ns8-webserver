@@ -20,10 +20,40 @@
 # along with NethServer.  If not, see COPYING.
 #
 
+import os
+import glob
+import configparser
 import json
 import sys
 import agent
+configuration = {}
+vhosts = []
+for file in glob.iglob("databases/vhosts/*.ini"):
+    config = configparser.ConfigParser()
+    config.read(file)
+    ServerNames = config['vhost']['ServerNames'].split(',')
+    vhost = {
+        "ServerNames" : ServerNames,
+        "Port" : int(config['vhost']['port']),
+        "PhpVersion" : config['vhost']['PhpVersion'],
+        "memorylimit" : int(config['vhost']['memorylimit']),
+        "allowurlfopen" : config['vhost']['allowurlfopen'],
+        "uploadmaxfilesize" : int(config['vhost']['uploadmaxfilesize']),
+        "postmaxsize" : int(config['vhost']['postmaxsize']),
+        "maxexecutiontime" : int(config['vhost']['maxexecutiontime']),
+        "maxfileuploads" : int(config['vhost']['maxfileuploads']),
+        "Indexes" : config['vhost']['Indexes'],
+        "status" : config['vhost']['status'],
+        "name": str(config['vhost']['port']),
+        }
+    vhosts.append(vhost)
 
-config = {}
+configuration['virtualhost'] = vhosts
+# Read current configuration from Redis
+env = f'module/{os.environ["MODULE_ID"]}/environment'
+rdb = agent.redis_connect()
+configuration["sftp_tcp_port"] = int(rdb.hget(env, "SFTP_TCP_PORT"));
+configuration["path"] =  rdb.hget(env, "TRAEFIK_PATH");
+configuration["http2https"] =  rdb.hget(env, "TRAEFIK_HTTP2HTTPS") == "True";
 
-json.dump(config, fp=sys.stdout)
+json.dump(configuration, fp=sys.stdout)

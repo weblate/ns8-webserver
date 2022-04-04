@@ -1,0 +1,105 @@
+#!/usr/bin/env python3
+#
+# Copyright (C) 2022 Nethesis S.r.l.
+# http://www.nethesis.it - nethserver@nethesis.it
+#
+# This script is part of NethServer.
+#
+# NethServer is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License,
+# or any later version.
+#
+# NethServer is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with NethServer.  If not, see COPYING.
+#
+import configparser
+import os
+import json
+import sys
+import subprocess
+import random
+import string
+import http.client
+
+# agent is a NethServer library which provides function to communicate with the agent
+import agent
+
+config = configparser.ConfigParser()
+# Try to parse the stdin as JSON.
+# If parsing fails, output everything to stderr
+data = json.load(sys.stdin)
+
+ServerNames = data.get("ServerNames")
+PhpVersion = data.get("PhpVersion")
+MemoryLimit = data.get("MemoryLimit",'512')
+AllowUrlfOpen = data.get("AllowUrlfOpen",'enabled')
+Indexes = data.get("Indexes",'disabled')
+status = data.get("status",'enabled')
+UploadMaxFilesize = data.get("UploadMaxFilesize",'4')
+PostMaxSize = data.get("PostMaxSize",'8')
+MaxExecutionTime = data.get("MaxExecutionTime",'0')
+MaxFileUploads = data.get("MaxFileUploads",'20')
+
+with open("databases/NextFpmPort", "r+") as fp:
+    NextFpmPort = int(fp.read() or "9000") + 1
+    fp.seek(0)
+    fp.write(str(NextFpmPort))
+
+config['vhost'] = {}
+config['vhost']['ServerNames'] = ','.join(ServerNames)
+config['vhost']['port'] = str(NextFpmPort)
+config['vhost']['PhpVersion'] = str(PhpVersion)
+config['vhost']['MemoryLimit'] = str(MemoryLimit)
+config['vhost']['AllowUrlfOpen'] = str(AllowUrlfOpen)
+config['vhost']['Indexes'] = str(Indexes)
+config['vhost']['status'] = str(status)
+config['vhost']['UploadMaxFilesize'] = str(UploadMaxFilesize)
+config['vhost']['PostMaxSize'] = str(PostMaxSize)
+config['vhost']['MaxExecutionTime'] = str(MaxExecutionTime)
+config['vhost']['MaxFileUploads'] = str(MaxFileUploads)
+
+with open( 'databases/vhosts/' + str(NextFpmPort)+'.ini', 'w') as configfile:
+    config.write(configfile)
+
+# we need to create the webroot folder for the website
+subprocess.run(["podman","exec","-i","nginx","mkdir","-p","/usr/share/nginx/html/"+str(NextFpmPort)])
+
+# we need to create the user in sftpgo
+
+f = open ('sftpgo.conf.d/API_KEY', "r")
+api_key = f.read()
+f.close()
+
+#we need to create a password to authenticate to sftpgo user
+def get_random_string(length):
+    # choose from all lowercase letter
+    letters = string.ascii_lowercase
+    result_str = ''.join(random.choice(letters) for i in range(length))
+    return result_str
+
+password = get_random_string(16)
+
+# write the key to a file and protect it
+f = open ('sftpgo.conf.d/secrets/'+str(NextFpmPort)+'.secret', "w")
+f.write(password)
+f.close()
+os.chmod('sftpgo.conf.d/secrets/'+str(NextFpmPort)+'.secret', 0o600)
+
+# connect to sftpgo api and create the user username === NextFpmPort
+conn = http.client.HTTPConnection("localhost:"+os.environ["SFTPGO_TCP_PORT"])
+
+payload = '{"id":1,"status":1,"username":"'+str(NextFpmPort)+'","expiration_date":0,"password":"'+password+'","home_dir":"/srv/sftpgo/data/'+str(NextFpmPort)+'","uid":0,"gid":0,"max_sessions":0,"quota_size":0,"quota_files":0,"permissions":{"/":["*"]},"created_at":0,"updated_at":0,"filters":{"tls_username":"None","hooks":{"external_auth_disabled":false,"pre_login_disabled":false,"check_password_disabled":false},"totp_config":{"secret":{}}},"filesystem":{"provider":0,"s3config":{"access_secret":{}},"gcsconfig":{"credentials":{}},"azblobconfig":{"account_key":{},"sas_url":{}},"cryptconfig":{"passphrase":{}},"sftpconfig":{"password":{},"private_key":{}}}}'
+
+headers = {
+    'Content-Type': "application/json",
+    'X-SFTPGO-API-KEY': api_key
+    }
+
+conn.request("POST", "/api/v2/users", payload, headers)
+

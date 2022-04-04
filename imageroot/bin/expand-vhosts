@@ -1,0 +1,90 @@
+#!/usr/bin/env python3
+
+#
+# Copyright (C) 2022 Nethesis S.r.l.
+# http://www.nethesis.it - nethserver@nethesis.it
+#
+# This script is part of NethServer.
+#
+# NethServer is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License,
+# or any later version.
+#
+# NethServer is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with NethServer.  If not, see COPYING.
+#
+
+import os
+import glob
+import configparser
+import json
+import sys
+import subprocess
+from jinja2 import Environment, FileSystemLoader, select_autoescape
+
+for file in glob.iglob("conf.d/dyn-*.conf"):
+    os.remove(file)
+
+for file in glob.iglob("php*-fpm-custom.d/dyn-*.conf"):
+    os.remove(file)
+
+jenv = Environment(
+    loader=FileSystemLoader(os.getenv("AGENT_INSTALL_DIR")+"/templates"),
+    autoescape=select_autoescape(),
+    keep_trailing_newline=True,
+)
+
+for file in glob.iglob("databases/vhosts/*.ini"):
+    config = configparser.ConfigParser()
+    config.read(file)
+    ServerNames = config['vhost']['ServerNames'].split(',')
+
+    status = config['vhost']['status']
+    if  status == 'disabled':
+        continue
+
+    port = config['vhost']['port']
+    PhpVersion = config['vhost']['PhpVersion']
+    MemoryLimit = config['vhost']['MemoryLimit']
+    AllowUrlfOpen = config['vhost']['AllowUrlfOpen']
+    UploadMaxFilesize = config['vhost']['UploadMaxFilesize']
+    PostMaxSize = config['vhost']['PostMaxSize']
+    MaxExecutionTime = config['vhost']['MaxExecutionTime']
+    MaxFileUploads = config['vhost']['MaxFileUploads']
+    Indexes = config['vhost']['Indexes']
+    s = ' '
+
+    properties = {
+    "names": s.join(ServerNames),
+    "WebRoot": port,
+    "port": port,
+    "PhpVersion": PhpVersion,
+    "MemoryLimit": MemoryLimit,
+    "AllowUrlfOpen": AllowUrlfOpen,
+    "UploadMaxFilesize": UploadMaxFilesize,
+    "PostMaxSize": PostMaxSize,
+    "MaxExecutionTime": MaxExecutionTime,
+    "MaxFileUploads": MaxFileUploads,
+    "Indexes": 'on' if Indexes == 'enabled' else 'off'
+    }
+
+    json_properties = json.dumps(properties)
+
+    template = jenv.get_template('vhost-nginx.conf')
+    output = template.render(json.loads(json_properties))
+    with open("conf.d/dyn-"+str(port)+".conf","w") as f:
+        f.write(output)
+
+    if PhpVersion:
+        template = jenv.get_template('php-fpm-pool.conf')
+        output = template.render(json.loads(json_properties))
+        with open("php"+str(PhpVersion)+"-fpm-custom.d/dyn-"+str(port)+".conf", "w") as f:
+            f.write(output)
+        # php-fpm expects to find its customisation file
+        open("php"+str(PhpVersion)+"-fpm-custom.d/dyn-"+str(port)+".custom", "a").close

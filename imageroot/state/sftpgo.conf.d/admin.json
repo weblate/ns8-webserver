@@ -1,0 +1,27 @@
+{
+    "users": [],
+    "folders": [],
+    "admins": [
+        {
+            "id": 1,
+            "status": 1,
+            "username": "admin",
+            "password": "$2a$10$6N9/SfXcjmkRLMuJj0mVMugzPuZhoI4aynfkIpIx9lzagL7CIBI0m",
+            "permissions": [
+                "*"
+            ],
+            "filters": {
+                "allow_api_key_auth": true,
+                "totp_config": {
+                    "secret": {}
+                }
+            },
+            "created_at": 0,
+            "updated_at": 0,
+            "last_login": 0
+        }
+    ],
+    "api_keys": [],
+    "shares": [],
+    "version": 10
+}

@@ -1,0 +1,88 @@
+#!/usr/bin/env python3
+#
+# Copyright (C) 2022 Nethesis S.r.l.
+# http://www.nethesis.it - nethserver@nethesis.it
+#
+# This script is part of NethServer.
+#
+# NethServer is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License,
+# or any later version.
+#
+# NethServer is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with NethServer.  If not, see COPYING.
+#
+import configparser
+import os
+import json
+import sys
+import subprocess
+
+# agent is a NethServer library which provides function to communicate with the agent
+import agent
+import agent.tasks
+
+config = configparser.ConfigParser()
+# Try to parse the stdin as JSON.
+# If parsing fails, output everything to stderr
+
+data = json.load(sys.stdin)
+
+ServerNames = data.get("ServerNames")
+port = data.get('port')
+PhpVersion = data.get("PhpVersion")
+MemoryLimit = data.get("MemoryLimit",'512')
+AllowUrlfOpen = data.get("AllowUrlfOpen",'enabled')
+Indexes = data.get("Indexes",'disabled')
+status = data.get("status",'enabled')
+UploadMaxFilesize = data.get("UploadMaxFilesize",'4')
+PostMaxSize = data.get("PostMaxSize",'8')
+MaxExecutionTime = data.get("MaxExecutionTime",'0')
+MaxFileUploads = data.get("MaxFileUploads",'20')
+
+# Find default traefik instance for current node
+default_traefik_id = agent.resolve_agent_id('traefik@node')
+if default_traefik_id is None:
+    sys.exit(2)
+
+#Remove old routes in traefik
+file = "databases/vhosts/"+str(port)+'.ini'
+config.read(file)
+hosts = config['vhost']['ServerNames'].split(',')
+
+for host in hosts:
+    # remove traefik virtual host
+    response = agent.tasks.run(
+        agent_id=default_traefik_id,
+        action='delete-route',
+        data={
+            'instance': os.environ['MODULE_ID'] + '-' + host
+        },
+    )
+
+    # Check if traefik configuration has been successfull
+    agent.assert_exp(response['exit_code'] == 0)
+
+
+# write the configuration to the database
+config['vhost'] = {}
+config['vhost']['ServerNames'] = ','.join(ServerNames)
+config['vhost']['PhpVersion'] = str(PhpVersion)
+config['vhost']['port'] = str(port)
+config['vhost']['MemoryLimit'] = str(MemoryLimit)
+config['vhost']['AllowUrlfOpen'] = str(AllowUrlfOpen)
+config['vhost']['Indexes'] = str(Indexes)
+config['vhost']['status'] = str(status)
+config['vhost']['UploadMaxFilesize'] = str(UploadMaxFilesize)
+config['vhost']['PostMaxSize'] = str(PostMaxSize)
+config['vhost']['MaxExecutionTime'] = str(MaxExecutionTime)
+config['vhost']['MaxFileUploads'] = str(MaxFileUploads)
+
+with open( 'databases/vhosts/' + str(port) +'.ini', 'w') as configfile:
+    config.write(configfile)
