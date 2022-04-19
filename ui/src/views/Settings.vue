@@ -58,7 +58,7 @@
                 <span>:</span>
                 <cv-link
                   class="mg-bottom mg-left"
-                  :href="'http://' + hostname + path"
+                  :href="'http://' + hostname + path+'/web/admin/login'"
                   target="_blank"
                   :inline="false"
                 >
