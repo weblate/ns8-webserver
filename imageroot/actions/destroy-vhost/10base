@@ -47,11 +47,6 @@ files = glob.glob("php*-fpm-custom.d/dyn-"+str(port)+".custom")
 for file in files:
     os.remove(file)
 
-# destroy the sftpgo secrets
-path='sftpgo.conf.d/secrets/'+str(port)+'.secret'
-if os.path.exists(path):
-    os.remove(path)
-
 # connect to sftpgo api and delete the user username === port
 # read api key
 f = open ('sftpgo.conf.d/API_KEY', "r")
