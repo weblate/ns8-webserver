@@ -18,6 +18,13 @@
         <span>{{ $t("status.title") }}</span>
       </cv-side-nav-link>
       <cv-side-nav-link
+        @click="goToAppPage(instanceName, 'virtualhosts')"
+        :class="{ 'current-page': isLinkActive('virtualhosts') }"
+      >
+        <template v-slot:nav-icon><Settings20 /></template>
+        <span>{{ $t("virtualhosts.title") }}</span>
+      </cv-side-nav-link>
+      <cv-side-nav-link
         @click="goToAppPage(instanceName, 'settings')"
         :class="{ 'current-page': isLinkActive('settings') }"
       >
