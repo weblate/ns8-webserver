@@ -5,6 +5,16 @@
         <h2>{{ $t("status.title") }}</h2>
       </cv-column>
     </cv-row>
+    <cv-row v-if="error.getConfiguration">
+      <cv-column>
+        <NsInlineNotification
+          kind="error"
+          :title="$t('action.get-sftp-configuration')"
+          :description="error.getConfiguration"
+          :showCloseButton="false"
+        />
+      </cv-column>
+    </cv-row>
     <cv-row v-if="error.getStatus">
       <cv-column>
         <NsInlineNotification
@@ -36,6 +46,88 @@
       </cv-column>
     </cv-row>
     <cv-row>
+      <cv-column :md="4" :max="4">
+        <NsInfoCard
+          light
+          :title="$t('status.sftpgo_admin_url')"
+          :icon="Settings32"
+          :loading="loading.getConfiguration"
+          class="min-height-card"
+        >
+        <template slot="content">
+          <div class="card-rows">
+            <div class="card-row">
+            {{ $t("status.default_credentials") }}
+              <cv-tooltip
+                alignment="start"
+                direction="top"
+                :tip="$t('status.sftpgo_admin_login_tips')"
+                class="info tooltip-mg-left"
+              >
+              </cv-tooltip>
+            </div>
+            <div class="card-row">
+              <NsButton kind="ghost" :icon="Launch20" @click="goToSftpgoAdmin">
+                {{ $t("status.open_web_admin_page") }}
+              </NsButton>
+            </div>
+          </div>
+        </template>
+        </NsInfoCard>
+      </cv-column>
+      <cv-column :md="4" :max="4">
+        <NsInfoCard
+          light
+          :title="$t('status.sftpgo_user_url')"
+          :icon="Settings32"
+          :loading="loading.getConfiguration"
+          class="min-height-card"
+        >
+        <template slot="content">
+          <div class="card-rows">
+            <div class="card-row">
+            {{ $t("status.default_credentials") }}
+              <cv-tooltip
+                alignment="start"
+                direction="top"
+                :tip="$t('status.sftpgo_user_login_tips')"
+                class="info tooltip-mg-left"
+              >
+              </cv-tooltip>
+            </div>
+            <div class="card-row">
+              <NsButton kind="ghost" :icon="Launch20" @click="goToSftpgoUser">
+                {{ $t("status.open_web_client_page") }}
+              </NsButton>
+            </div>
+          </div>
+        </template>
+        </NsInfoCard>
+      </cv-column>
+      <cv-column :md="4" :max="4">
+        <NsInfoCard
+          light
+          :title="sftp_tcp_port"
+          :icon="Network_232"
+          :loading="loading.getConfiguration"
+          class="min-height-card"
+        >
+        <template slot="content">
+          <div class="card-rows">
+            <div class="card-row">
+            {{$t("status.External_sftp_tcp_port")}}
+              <cv-tooltip
+                alignment="start"
+                direction="top"
+                :tip="$t('status.sftp_tcp_port_tips',{port: this.sftp_tcp_port})"
+                class="info tooltip-mg-left"
+              >
+              </cv-tooltip>
+            </div>
+          </div>
+        </template>
+        </NsInfoCard>
+      </cv-column>
       <cv-column :md="4" :max="4">
         <NsInfoCard
           light
@@ -256,7 +348,7 @@ import {
   IconService,
   UtilService,
 } from "@nethserver/ns8-ui-lib";
-
+import Settings32 from "@carbon/icons-vue/es/settings/32"; 
 export default {
   name: "Status",
   mixins: [TaskService, QueryParamService, IconService, UtilService],
@@ -265,29 +357,35 @@ export default {
   },
   data() {
     return {
+      Settings32,
       q: {
         page: "status",
       },
       urlCheckInterval: null,
       isRedirectChecked: false,
       redirectTimeout: 0,
+      hostname: location.hostname,
       status: {
         instance: "",
         services: [],
         images: [],
         volumes: [],
       },
+      path:"",
+      sftp_tcp_port:"",
       backupRepositories: [],
       backups: [],
       loading: {
         getStatus: false,
         listBackupRepositories: false,
         listBackups: false,
+        getConfiguration:false
       },
       error: {
         getStatus: "",
         listBackupRepositories: "",
         listBackups: "",
+        getConfiguration:""
       },
     };
   },
@@ -332,10 +430,66 @@ export default {
     clearTimeout(this.redirectTimeout);
   },
   created() {
+    this.getConfiguration();
     this.getStatus();
     this.listBackupRepositories();
   },
   methods: {
+      goToSftpgoAdmin() {
+        window.open('http://' + this.hostname + this.path+'/web/admin/login');
+      },
+      goToSftpgoUser() {
+        window.open('http://' + this.hostname + this.path+'/web/client/login');
+      },
+      
+        async getConfiguration() {
+      this.loading.getConfiguration = true;
+      this.error.getConfiguration = "";
+      const taskAction = "get-configuration";
+
+      // register to task error
+      this.core.$root.$off(taskAction + "-aborted");
+      this.core.$root.$once(
+        taskAction + "-aborted",
+        this.getConfigurationAborted
+      );
+
+      // register to task completion
+      this.core.$root.$off(taskAction + "-completed");
+      this.core.$root.$once(
+        taskAction + "-completed",
+        this.getConfigurationCompleted
+      );
+
+      const res = await to(
+        this.createModuleTaskForApp(this.instanceName, {
+          action: taskAction,
+          extra: {
+            title: this.$t("action." + taskAction),
+            isNotificationHidden: true,
+          },
+        })
+      );
+      const err = res[0];
+
+      if (err) {
+        console.error(`error creating task ${taskAction}`, err);
+        this.error.getConfiguration = this.getErrorMessage(err);
+        this.loading.getConfiguration = false;
+        return;
+      }
+    },
+    getConfigurationAborted(taskResult, taskContext) {
+      console.error(`${taskContext.action} aborted`, taskResult);
+      this.error.getConfiguration = this.core.$t("error.generic_error");
+      this.loading.getConfiguration = false;
+    },
+    getConfigurationCompleted(taskContext, taskResult) {
+      const config = taskResult.output;
+      this.sftp_tcp_port = config.sftp_tcp_port;
+      this.path = config.path
+      this.loading.getConfiguration = false;
+    },
     async getStatus() {
       this.loading.getStatus = true;
       this.error.getStatus = "";
@@ -501,5 +655,20 @@ export default {
 .break-word {
   word-wrap: break-word;
   max-width: 30vw;
+}
+.card-rows {
+  display: flex;
+  flex-direction: column;
+}
+.card-row {
+  margin-bottom: $spacing-05;
+  display: flex;
+  justify-content: center;
+}
+.card-row:last-child {
+  margin-bottom: 0;
+}
+.tooltip-mg-left {
+  margin-left: $spacing-02;
 }
 </style>

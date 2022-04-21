@@ -17,13 +17,15 @@
         </cv-column>
       </cv-row>
       <cv-row v-if="virtualhost.length && !loading.getConfiguration">
-        <NsButton
-          kind="primary"
-          :icon="Add20"
-          @click="showCreateVhostModal()"
-          class="empty-state-button"
-          >{{ $t("virtualhosts.create_virtualhost") }}
-        </NsButton>
+        <cv-column>
+          <NsButton
+            kind="primary"
+            :icon="Add20"
+            @click="showCreateVhostModal()"
+            class="empty-state-button"
+            >{{ $t("virtualhosts.create_virtualhost") }}
+          </NsButton>
+        </cv-column>
       </cv-row>
       <!-- empty state -->
       <cv-row v-if="!virtualhost.length && !loading.getConfiguration">
@@ -31,7 +33,7 @@
           <cv-tile kind="standard" :light="true">
             <NsEmptyState :title="$t('virtualhosts.no_virtualhost_configured')">
               <template #pictogram>
-                <GroupPictogram />
+                <DataBase32 />
               </template>
               <template #description>
                 <div>{{ $t("virtualhosts.empty_state_virtualhost_description") }}</div>
@@ -56,7 +58,7 @@
           :md="4"
           :max="4"
         >
-          <NsInfoCard light :title="vhost.ServerNames[0]" :icon="Events32">
+          <NsInfoCard light :title="vhost.ServerNames[0]" :icon="DataBase32">
             <template #menu>
               <cv-overflow-menu
                 :flip-menu="true"
@@ -77,24 +79,53 @@
                   @click="DisableVhost(vhost)"
                 >
                   <NsMenuItem
-                    :icon="Reset20"
+                    :icon="Power20"
                     :label="vhost.status == 'enabled' ? $t('virtualhosts.disable_virtualhost') : $t('virtualhosts.enable_virtualhost')"
                   />
                 </cv-overflow-menu-item>
               </cv-overflow-menu>
             </template>
             <template #content>
-              <div class="domain-card-content">
-                <div class="row actions">
-                  <NsButton
-                    kind="ghost"
-                    :disabled="vhost.status==='disabled'"
-                    :icon="ZoomIn20"
-                    @click="showEditVhostModal(vhost)"
-                    >
-                    {{ $t("virtualhosts.edit") }}
-                  </NsButton>
-                </div>
+              <div class="card-rows">
+                <div class="card-row">
+                  <cv-link
+                    :href="'http://' + hostname + path+'/web/client/login'"
+                    target="_blank"
+                    :inline="false"
+                  >
+                  {{ $t("virtualhosts.sftpgo_url") }}
+                  <cv-tooltip
+                    alignment="start"
+                    direction="top"
+                    :tip="$t('virtualhosts.sftpgo_login_tips',{user: isEdit ? Port: NextFpmPort})"
+                    class="info tooltip-mg-left"
+                  >
+                  </cv-tooltip>
+                  </cv-link>
+                  </div>
+                  <div class="card-row">
+                    <cv-tag
+                      v-if="vhost.status == 'enabled'"
+                      kind="green"
+                      :label="$t('common.enabled')"
+                      :title="$t('common.enabled')"
+                    ></cv-tag>
+                    <cv-tag
+                      v-else
+                      kind="red"
+                      :label="$t('common.disabled')"
+                      :title="$t('common.disabled')"
+                    ></cv-tag>
+                  </div>
+                  <div class="card-row actions ">
+                    <NsButton
+                      kind="ghost"
+                      :icon="Edit20"
+                      @click="showEditVhostModal(vhost)"
+                      >
+                      {{ $t("virtualhosts.edit") }}
+                    </NsButton>
+                  </div>
               </div>
             </template>
           </NsInfoCard>
@@ -115,7 +146,7 @@
       @confirmDelete="deleteDomain(currentVhost)"
     />
 
-    <cv-modal 
+    <NsModal 
       :visible="isShownCreateVhostModal"
       @modal-hidden="hideEditRepoModal"
       @primary-click="SaveVhost"
@@ -126,43 +157,6 @@
       <template v-if="!isEdit" slot="title">{{$t('virtualhosts.Create_Virtualhosts')}}</template>
       <template slot="content">
         <cv-form @submit.prevent="SaveVhost">
-          <template>
-            <span class="mg-bottom">
-              {{ $t("virtualhosts.sftp_tcp_port") }}
-              <cv-tooltip
-                alignment="start"
-                direction="bottom"
-                :tip="$t('virtualhosts.sftp_tcp_port_tips', {port: sftp_tcp_port, user: isEdit ? Port: NextFpmPort, hostname: hostname })"
-                class="info mg-bottom"
-              >
-              </cv-tooltip>
-            </span>
-            <span>:</span>
-            <span class="mg-bottom mg-left">
-              {{ sftp_tcp_port }}
-            </span>
-            <section>
-            <span>
-              {{ $t("virtualhosts.sftpgo_url") }}
-              <cv-tooltip
-                alignment="start"
-                direction="bottom"
-                :tip="$t('virtualhosts.sftpgo_login_tips',{user: isEdit ? Port: NextFpmPort})"
-                class="info mg-bottom"
-              >
-              </cv-tooltip>
-            </span>
-            <span>:</span>
-            <cv-link
-              class="mg-bottom mg-left"
-              :href="'http://' + hostname + path+'/web/client/login'"
-              target="_blank"
-              :inline="false"
-            >
-              {{ $t("virtualhosts.link") }}
-            </cv-link>
-            </section>
-          </template>
           <!-- domain name -->
           <cv-text-area
             :label="$t('virtualhosts.ServerNames')"
@@ -331,7 +325,7 @@
       </template>
       <template slot="secondary-button">{{ $t("virtualhosts.cancel") }}</template>
       <template slot="primary-button">{{ $t("virtualhosts.save") }}</template>
-    </cv-modal>
+    </NsModal>
   </div>
 </template>
 
@@ -344,10 +338,10 @@ import {
   TaskService,
   IconService,
 } from "@nethserver/ns8-ui-lib";
-
+import DataBase32 from "@carbon/icons-vue/es/data--base/32";
 export default {
   name: "VirtualHosts",
-  components: {  },
+  components:{ DataBase32},
   mixins: [TaskService, IconService, UtilService, QueryParamService],
   pageTitle() {
     return this.$t("virtualhosts.title") + " - " + this.appName;
@@ -357,6 +351,7 @@ export default {
       q: {
         page: "virtualhosts",
       },
+      DataBase32,
       isShownCreateVhostModal: false,
       isShownDeleteVhostModal: false,
       path:"",
@@ -365,6 +360,7 @@ export default {
       indexes:"",
       allowurlfopen:"",
       isEdit: false,
+      isDisable:false,
       currentVhost: {
         ServerNames:[],
         Port:"",
@@ -574,6 +570,7 @@ export default {
       this.MaxFileUploads = vhost.MaxFileUploads.toString();
       this.status = (vhost.status === "enabled") ? "disabled": "enabled";
       this.isEdit = true;
+      this.isDisable = true;
       this.SaveVhost();
     },
     showEditVhostModal(vhost) {
@@ -596,6 +593,7 @@ export default {
       this.MaxFileUploads = vhost.MaxFileUploads.toString();
       this.status = vhost.status;
       this.isEdit = true;
+      this.isDisable = false;
       this.isLoading = true;
 
       this.$nextTick(() => {
@@ -623,6 +621,7 @@ export default {
 
       this.status = this.currentVhost.status;
       this.isEdit = false;
+      this.isDisable = false;
       this.$nextTick(() => {
         this.isShownCreateVhostModal = true;
       });
@@ -709,7 +708,9 @@ export default {
             status: this.status
           },
           extra: {
-            title: this.$t("virtualhosts.instance_configuration", {
+            title: this.isDisable ? this.$t("virtualhosts.Disable_virtual_Host" , {
+              instance: this.instanceName,
+            }) : this.$t("virtualhosts.instance_configuration", {
               instance: this.instanceName,
             }),
             description: this.$t("virtualhosts.configuring"),
@@ -743,13 +744,28 @@ export default {
 <style scoped lang="scss">
 @import "../styles/carbon-utils";
 .mg-bottom {
-  margin-bottom: $spacing-06;
+  margin-bottom: $spacing-04;
 }
 .mg-left {
-  margin-left: $spacing-05;
+  margin-left: $spacing-06;
+}
+.tooltip-mg-left {
+  margin-left: $spacing-02;
 }
 .empty-state-button {
   margin-top: $spacing-07;
   margin-bottom: $spacing-07;
+}
+.card-rows {
+  display: flex;
+  flex-direction: column;
+}
+.card-row {
+  margin-bottom: $spacing-05;
+  display: flex;
+  justify-content: center;
+}
+.card-row:last-child {
+  margin-bottom: 0;
 }
 </style>

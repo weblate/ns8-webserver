@@ -21,7 +21,7 @@
         @click="goToAppPage(instanceName, 'virtualhosts')"
         :class="{ 'current-page': isLinkActive('virtualhosts') }"
       >
-        <template v-slot:nav-icon><Settings20 /></template>
+        <template v-slot:nav-icon><DataBase20 /></template>
         <span>{{ $t("virtualhosts.title") }}</span>
       </cv-side-nav-link>
       <cv-side-nav-link
@@ -46,6 +46,7 @@
 import Settings20 from "@carbon/icons-vue/es/settings/20";
 import Information20 from "@carbon/icons-vue/es/information/20";
 import Activity20 from "@carbon/icons-vue/es/activity/20";
+import DataBase20 from "@carbon/icons-vue/es/data--base/20";
 import { mapState } from "vuex";
 import { QueryParamService, UtilService } from "@nethserver/ns8-ui-lib";
 
@@ -55,6 +56,7 @@ export default {
     Settings20,
     Information20,
     Activity20,
+    DataBase20
   },
   mixins: [QueryParamService, UtilService],
   data() {

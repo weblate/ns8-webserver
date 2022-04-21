@@ -29,57 +29,6 @@
               ref="path"
             >
             </cv-text-input>
-            <template v-if="sftp_tcp_port">
-              <span class="mg-bottom">
-                {{ $t("settings.sftp_tcp_port") }}
-                <cv-tooltip
-                  alignment="start"
-                  direction="bottom"
-                  :tip="$t('settings.sftp_tcp_port_tips')"
-                  class="info mg-bottom"
-                >
-                </cv-tooltip>
-              </span>
-              <span>:</span>
-              <span class="mg-bottom mg-left">
-                {{ sftp_tcp_port }}
-              </span>
-              <section>
-                <span>
-                  {{ $t("settings.sftpgo_url") }}
-                  <cv-tooltip
-                    alignment="start"
-                    direction="bottom"
-                    :tip="$t('settings.sftpgo_login_tips')"
-                    class="info mg-bottom"
-                  >
-                  </cv-tooltip>
-                </span>
-                <span>:</span>
-                <cv-link
-                  class="mg-bottom mg-left"
-                  :href="'http://' + hostname + path+'/web/admin/login'"
-                  target="_blank"
-                  :inline="false"
-                >
-                  {{ $t("settings.link") }}
-                </cv-link>
-              </section>
-            </template>
-            <!-- <cv-toggle
-              value="letsEncrypt"
-              :label="$t('settings.lets_encrypt')"
-              v-model="isLetsEncryptEnabled"
-              :disabled="loading.getConfiguration || loading.configureModule"
-              class="mg-bottom"
-            >
-              <template slot="text-left">{{
-                $t("settings.disabled")
-              }}</template>
-              <template slot="text-right">{{
-                $t("settings.enabled")
-              }}</template>
-            </cv-toggle> -->
             <cv-toggle
               value="httpToHttps"
               :label="$t('settings.http_to_https')"
@@ -143,7 +92,6 @@ export default {
       urlCheckInterval: null,
       path: "",
       sftp_tcp_port: "",
-      // isLetsEncryptEnabled: false,
       isHttpToHttpsEnabled: false,
       loading: {
         getConfiguration: false,
@@ -221,7 +169,6 @@ export default {
       const config = taskResult.output;
       this.path = config.path;
       this.sftp_tcp_port = config.sftp_tcp_port;
-      // this.isLetsEncryptEnabled = config.lets_encrypt;
       this.isHttpToHttpsEnabled = config.http2https;
       this.loading.getConfiguration = false;
       this.focusElement("path");
@@ -288,7 +235,6 @@ export default {
           action: taskAction,
           data: {
             path: this.path,
-            // lets_encrypt: this.isLetsEncryptEnabled,
             http2https: this.isHttpToHttpsEnabled,
           },
           extra: {
