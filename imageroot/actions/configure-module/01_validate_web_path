@@ -33,7 +33,6 @@ path=data['path']
 
 # set error validation
 agent.set_weight(os.path.basename(__file__), 0)
-agent.set_weight("01_validate_web_path", 0)
 
 # if we have the same path, lets go further
 if path == os.environ['TRAEFIK_PATH'] or path == os.environ['TRAEFIK_PATH'] + '/':

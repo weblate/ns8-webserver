@@ -36,7 +36,6 @@ port = data.get("port")
 
 # set error validation
 agent.set_weight(os.path.basename(__file__), 0)
-agent.set_weight("01_validate_domain", 0)
 
 #Read old routes in config databse file, 
 # we will test it later
@@ -46,25 +45,22 @@ config.read(file)
 hosts = config['vhost']['ServerNames'].split(',')
 
 
-# do not verify the certificate
-ctx = ssl.create_default_context()
-ctx.check_hostname = False
-ctx.verify_mode = ssl.CERT_NONE
 
 
 http = 0
 https = 0
-error = True
 
 def testUrl(domain):
     global http
     global https
-    global ctx
-    global error
     global hosts
+    # do not verify the certificate
+    ctx = ssl.create_default_context()
+    ctx.check_hostname = False
+    ctx.verify_mode = ssl.CERT_NONE
     # test if this domain is already in use
     if domain in hosts:
-        error = False
+        return
     else:
         # try on http
         try:
@@ -84,7 +80,7 @@ def testUrl(domain):
 
         if http == 404 and  https == 404:
             # there is no website on http or https -> OK
-            error = False
+            return
         else:
             # path exists -> nok
             agent.set_status('validation-failed')
@@ -93,6 +89,3 @@ def testUrl(domain):
 
 for host in ServerNames:
     testUrl(host)
-
-if error == False:
-    sys.exit(0)
