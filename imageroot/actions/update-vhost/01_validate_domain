@@ -1,0 +1,91 @@
+#!/usr/bin/env python3
+#
+# Copyright (C) 2022 Nethesis S.r.l.
+# http://www.nethesis.it - nethserver@nethesis.it
+#
+# This script is part of NethServer.
+#
+# NethServer is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License,
+# or any later version.
+#
+# NethServer is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with NethServer.  If not, see COPYING.
+#
+import os
+import sys
+import json
+import agent
+import urllib.request
+import urllib.error
+import ssl
+import configparser
+
+
+
+# retrieve json data
+data = json.load(sys.stdin)
+ServerNames = data.get("ServerNames")
+Port = data.get("Port")
+
+# set error validation
+agent.set_weight(os.path.basename(__file__), 0)
+
+#Read old routes in config databse file, 
+# we will test it later
+file = "databases/vhosts/"+str(Port)+'.ini'
+config = configparser.ConfigParser()
+config.read(file)
+hosts = config['vhost']['ServerNames'].split(',')
+
+
+
+
+http = 0
+https = 0
+
+def testUrl(domain):
+    global http
+    global https
+    global hosts
+    # do not verify the certificate
+    ctx = ssl.create_default_context()
+    ctx.check_hostname = False
+    ctx.verify_mode = ssl.CERT_NONE
+    # test if this domain is already in use
+    if domain in hosts:
+        return
+    else:
+        # try on http
+        try:
+            req = urllib.request.Request('http://127.0.0.1')
+            req.add_header('Host', domain)
+            urllib.request.urlopen(req, context=ctx)
+        except urllib.error.HTTPError as e:
+            http = e.code
+
+        # try on https
+        try:
+            req = urllib.request.Request('https://127.0.0.1')
+            req.add_header('Host', domain)
+            urllib.request.urlopen(req, context=ctx)
+        except urllib.error.HTTPError as d:
+            https = d.code
+
+        if http == 404 and  https == 404:
+            # there is no website on http or https -> OK
+            return
+        else:
+            # path exists -> nok
+            agent.set_status('validation-failed')
+            json.dump([{'field':'ServerNames','parameter':'ServerNames','value':domain,'error':'domain_already_used_in_traefik'}],fp=sys.stdout)
+            sys.exit(2)
+
+for host in ServerNames:
+    testUrl(host)

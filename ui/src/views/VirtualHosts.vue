@@ -97,7 +97,7 @@
                   <cv-tooltip
                     alignment="start"
                     direction="top"
-                    :tip="$t('virtualhosts.sftpgo_login_tips',{user: isEdit ? Port: NextFpmPort})"
+                    :tip="$t('virtualhosts.sftpgo_login_tips',{user: isEdit ? Port: vhost.Port})"
                     class="info tooltip-mg-left"
                   >
                   </cv-tooltip>
