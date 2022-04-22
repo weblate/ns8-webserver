@@ -32,14 +32,14 @@ import configparser
 # retrieve json data
 data = json.load(sys.stdin)
 ServerNames = data.get("ServerNames")
-port = data.get("port")
+Port = data.get("Port")
 
 # set error validation
 agent.set_weight(os.path.basename(__file__), 0)
 
 #Read old routes in config databse file, 
 # we will test it later
-file = "databases/vhosts/"+str(port)+'.ini'
+file = "databases/vhosts/"+str(Port)+'.ini'
 config = configparser.ConfigParser()
 config.read(file)
 hosts = config['vhost']['ServerNames'].split(',')
