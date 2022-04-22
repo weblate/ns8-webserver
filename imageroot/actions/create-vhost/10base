@@ -45,6 +45,8 @@ UploadMaxFilesize = data.get("UploadMaxFilesize",'4')
 PostMaxSize = data.get("PostMaxSize",'8')
 MaxExecutionTime = data.get("MaxExecutionTime",'0')
 MaxFileUploads = data.get("MaxFileUploads",'20')
+h2hs = data.get("http2https", True)
+le = data.get("lets_encrypt", False)
 
 with open("databases/NextFpmPort", "r+") as fp:
     NextFpmPort = int(fp.read() or "9000") + 1
@@ -63,6 +65,8 @@ config['vhost']['UploadMaxFilesize'] = str(UploadMaxFilesize)
 config['vhost']['PostMaxSize'] = str(PostMaxSize)
 config['vhost']['MaxExecutionTime'] = str(MaxExecutionTime)
 config['vhost']['MaxFileUploads'] = str(MaxFileUploads)
+config['vhost']['http2https'] = str('enabled') if h2hs else str('disabled')
+config['vhost']['lets_encrypt'] = str('enabled') if le else str('disabled')
 
 with open( 'databases/vhosts/' + str(NextFpmPort)+'.ini', 'w') as configfile:
     config.write(configfile)
@@ -73,25 +77,10 @@ f = open ('sftpgo.conf.d/API_KEY', "r")
 api_key = f.read()
 f.close()
 
-#we need to create a password to authenticate to sftpgo user
-def get_random_string(length):
-    # choose from all lowercase letter
-    letters = string.ascii_lowercase
-    result_str = ''.join(random.choice(letters) for i in range(length))
-    return result_str
-
-password = get_random_string(16)
-
-# write the key to a file and protect it
-f = open ('sftpgo.conf.d/secrets/'+str(NextFpmPort)+'.secret', "w")
-f.write(password)
-f.close()
-os.chmod('sftpgo.conf.d/secrets/'+str(NextFpmPort)+'.secret', 0o600)
-
 # connect to sftpgo api and create the user username === NextFpmPort
 conn = http.client.HTTPConnection("localhost:"+os.environ["SFTPGO_TCP_PORT"])
 
-payload = '{"id":1,"status":1,"username":"'+str(NextFpmPort)+'","expiration_date":0,"password":"'+password+'","home_dir":"/srv/sftpgo/data/'+str(NextFpmPort)+'","uid":1,"gid":'+str(NextFpmPort)+',"max_sessions":0,"quota_size":0,"quota_files":0,"permissions":{"/":["*"]},"created_at":0,"updated_at":0,"filters":{"tls_username":"None","hooks":{"external_auth_disabled":false,"pre_login_disabled":false,"check_password_disabled":false},"totp_config":{"secret":{}}},"filesystem":{"provider":0,"s3config":{"access_secret":{}},"gcsconfig":{"credentials":{}},"azblobconfig":{"account_key":{},"sas_url":{}},"cryptconfig":{"passphrase":{}},"sftpconfig":{"password":{},"private_key":{}}}}'
+payload = '{"id":1,"status":1,"username":"'+str(NextFpmPort)+'","expiration_date":0,"password":"'+str(NextFpmPort)+'","home_dir":"/srv/sftpgo/data/'+str(NextFpmPort)+'","uid":1,"gid":'+str(NextFpmPort)+',"max_sessions":0,"quota_size":0,"quota_files":0,"permissions":{"/":["*"]},"created_at":0,"updated_at":0,"filters":{"tls_username":"None","hooks":{"external_auth_disabled":false,"pre_login_disabled":false,"check_password_disabled":false},"totp_config":{"secret":{}}},"filesystem":{"provider":0,"s3config":{"access_secret":{}},"gcsconfig":{"credentials":{}},"azblobconfig":{"account_key":{},"sas_url":{}},"cryptconfig":{"passphrase":{}},"sftpconfig":{"password":{},"private_key":{}}}}'
 
 headers = {
     'Content-Type': "application/json",

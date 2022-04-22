@@ -36,19 +36,29 @@ for file in glob.iglob("databases/vhosts/*.ini"):
         "ServerNames" : ServerNames,
         "Port" : int(config['vhost']['port']),
         "PhpVersion" : config['vhost']['PhpVersion'],
-        "memorylimit" : int(config['vhost']['memorylimit']),
+        "MemoryLimit" : int(config['vhost']['MemoryLimit']),
         "allowurlfopen" : config['vhost']['allowurlfopen'],
-        "uploadmaxfilesize" : int(config['vhost']['uploadmaxfilesize']),
-        "postmaxsize" : int(config['vhost']['postmaxsize']),
-        "maxexecutiontime" : int(config['vhost']['maxexecutiontime']),
-        "maxfileuploads" : int(config['vhost']['maxfileuploads']),
+        "UploadMaxFilesize" : int(config['vhost']['UploadMaxFilesize']),
+        "PostMaxSize" : int(config['vhost']['PostMaxSize']),
+        "MaxExecutionTime" : int(config['vhost']['MaxExecutionTime']),
+        "MaxFileUploads" : int(config['vhost']['MaxFileUploads']),
         "Indexes" : config['vhost']['Indexes'],
         "status" : config['vhost']['status'],
         "name": str(config['vhost']['port']),
-        }
+        "http2https": True if config['vhost']['http2https'] == "enabled" else False,
+        "lets_encrypt": True if config['vhost']['lets_encrypt'] == "enabled" else False
+    }
     vhosts.append(vhost)
 
 configuration['virtualhost'] = vhosts
+# read Netxfpmport
+with open("databases/NextFpmPort", "r") as fp:
+    NextFpmPort = int(fp.read() or "9000") + 1
+fp.close()
+
+configuration['NextFpmPort'] = NextFpmPort
+
+
 # Read current configuration from Redis
 env = f'module/{os.environ["MODULE_ID"]}/environment'
 rdb = agent.redis_connect()
