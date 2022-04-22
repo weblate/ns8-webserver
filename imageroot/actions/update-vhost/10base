@@ -35,7 +35,7 @@ config = configparser.ConfigParser()
 data = json.load(sys.stdin)
 
 ServerNames = data.get("ServerNames")
-port = data.get('port')
+port = data.get('Port')
 PhpVersion = data.get("PhpVersion")
 MemoryLimit = data.get("MemoryLimit",'512')
 AllowUrlfOpen = data.get("AllowUrlfOpen",'enabled')
@@ -45,6 +45,8 @@ UploadMaxFilesize = data.get("UploadMaxFilesize",'4')
 PostMaxSize = data.get("PostMaxSize",'8')
 MaxExecutionTime = data.get("MaxExecutionTime",'0')
 MaxFileUploads = data.get("MaxFileUploads",'20')
+h2hs = data.get("http2https", True)
+le = data.get("lets_encrypt", False)
 
 # Find default traefik instance for current node
 default_traefik_id = agent.resolve_agent_id('traefik@node')
@@ -83,6 +85,8 @@ config['vhost']['UploadMaxFilesize'] = str(UploadMaxFilesize)
 config['vhost']['PostMaxSize'] = str(PostMaxSize)
 config['vhost']['MaxExecutionTime'] = str(MaxExecutionTime)
 config['vhost']['MaxFileUploads'] = str(MaxFileUploads)
+config['vhost']['http2https'] = str('enabled') if h2hs else str('disabled')
+config['vhost']['lets_encrypt'] = str('enabled') if le else str('disabled')
 
 with open( 'databases/vhosts/' + str(port) +'.ini', 'w') as configfile:
     config.write(configfile)
