@@ -101,6 +101,7 @@ Launch `create-vhost`, by setting the following parameters:
 - `status`: enable the virtualhost in the configuration of nginx and php-fpm: use `enabled|disabled`
 
 Example:
+```
 api-cli run  create-vhost --agent module/webserver1 --data - <<EOF
 { 
 "PhpVersion": "7.4", 
@@ -117,6 +118,7 @@ api-cli run  create-vhost --agent module/webserver1 --data - <<EOF
 "status": "enabled"
 }
 EOF
+```
 
 The above command will:
 - start and configure the vhost with two domain names
