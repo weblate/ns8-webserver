@@ -37,8 +37,8 @@ for file in glob.iglob("databases/vhosts/*.ini"):
     config = configparser.ConfigParser()
     config.read(file)
     ServerNames = config['vhost']['ServerNames'].split(',')
-    http2https = True if config['vhost']['http2https'] == 'enabled' else False
-    lets_encrypt = True if config['vhost']['lets_encrypt'] == 'enabled' else False
+    http2https = config['vhost']['http2https'] == 'enabled'
+    lets_encrypt = config['vhost']['lets_encrypt'] == 'enabled'
     for host in ServerNames:
         # Configure traefik virtual host
         response = agent.tasks.run(
@@ -59,7 +59,7 @@ for file in glob.iglob("databases/vhosts/*.ini"):
 path = os.environ['TRAEFIK_PATH']
 http2https = os.environ['TRAEFIK_HTTP2HTTPS']
 if type(http2https) == str:
-     http2https = True if http2https.lower()  == "true" else False
+     http2https = http2https.lower() == "true"
 
 # Configure traefik virtual host
 response = agent.tasks.run(
