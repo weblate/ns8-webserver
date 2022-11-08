@@ -364,7 +364,7 @@ export default {
       urlCheckInterval: null,
       isRedirectChecked: false,
       redirectTimeout: 0,
-      hostname: location.hostname,
+      hostname: "",
       status: {
         instance: "",
         services: [],
@@ -488,6 +488,7 @@ export default {
       const config = taskResult.output;
       this.sftp_tcp_port = config.sftp_tcp_port;
       this.path = config.path
+      this.hostname = config.hostname
       this.loading.getConfiguration = false;
     },
     async getStatus() {
