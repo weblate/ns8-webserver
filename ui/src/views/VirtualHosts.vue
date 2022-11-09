@@ -379,7 +379,7 @@ export default {
       UploadMaxFilesize:"",
       virtualhost: [],
       NextFpmPort:"",
-      hostname: location.hostname,
+      hostname: "",
       urlCheckInterval: null,
       loading: {
         getConfiguration: false,
@@ -505,6 +505,7 @@ export default {
       this.NextFpmPort = config.NextFpmPort;
       this.sftp_tcp_port = config.sftp_tcp_port;
       this.path = config.path
+      this.hostname = config.hostname
       this.loading.getConfiguration = false;
     },
 

@@ -25,7 +25,8 @@
             ],
             "sftp_tcp_port": 20014,
             "path": "/sftpgo",
-            "http2https": true
+            "http2https": true,
+            "hostname": "foo.domain.com"
         }
     ],
     "type": "object",
@@ -33,7 +34,8 @@
         "path",
         "http2https",
         "sftp_tcp_port",
-        "virtualhost"
+        "virtualhost",
+        "hostname"
     ],
     "properties": {
         "http2https": {
@@ -50,6 +52,11 @@
             "type": "string",
             "description": "web path for the web application, like '/sftpgo'",
             "pattern": "^/?[a-zA-Z0-9_-]+/?$"
+        },
+        "hostname": {
+            "description": "Host name of the node, like 'foo.domain.com'",
+            "format": "idn-hostname",
+            "title": "hostname of the node"
         }
     },
     "virtualhost": {
