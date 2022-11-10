@@ -1,0 +1,33 @@
+#!/usr/bin/env python3
+
+#
+# Copyright (C) 2022 Nethesis S.r.l.
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+
+import os
+import sys
+import json
+import agent
+
+
+# retrieve json data
+data = json.load(sys.stdin)
+port = data['sftp_tcp_port']
+
+#  test if the port is the same
+if str(port) == os.environ.get('SFTP_TCP_PORT',""):
+    sys.exit(0)
+
+# first remove the previous port set
+if os.environ.get('SFTP_TCP_PORT', default=None) is not None:
+    agent.add_public_service(os.environ['MODULE_ID'], [
+    os.environ['SFTP_TCP_PORT'] + "/tcp", # external sftp port
+    ])
+
+# add the new port
+agent.add_public_service(os.environ['MODULE_ID'], [
+    str(port) + "/tcp", # external sftp port
+])
+
+# Ignore exit code

@@ -1,0 +1,24 @@
+#!/usr/bin/env python3
+
+#
+# Copyright (C) 2022 Nethesis S.r.l.
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+
+# Configure traefik route for sftpgo webui
+
+import os
+import sys
+import json
+import agent
+
+
+# Try to parse the stdin as JSON.
+# If parsing fails, output everything to stderr
+data = json.load(sys.stdin)
+
+# Setup default values
+sftp_tcp_port = data.get("sftp_tcp_port")
+
+# set sftp port env
+agent.set_env("SFTP_TCP_PORT",sftp_tcp_port)

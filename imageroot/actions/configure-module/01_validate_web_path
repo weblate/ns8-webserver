@@ -35,7 +35,7 @@ path=data['path']
 agent.set_weight(os.path.basename(__file__), 0)
 
 # if we have the same path, lets go further
-if path == os.environ['TRAEFIK_PATH'] or path == os.environ['TRAEFIK_PATH'] + '/':
+if path == os.environ.get('TRAEFIK_PATH',"") or path == os.environ.get('TRAEFIK_PATH',"") + '/':
     sys.exit(0)
 
 # do not verify the certificate

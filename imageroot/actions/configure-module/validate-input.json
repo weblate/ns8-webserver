@@ -21,6 +21,13 @@
             "type": "boolean",
             "title": "HTTP to HTTPS redirection",
             "description": "Redirect all the HTTP requests to HTTPS"
+        },
+        "sftp_tcp_port": {
+            "type": "integer",
+            "title": "port",
+            "description": "The port of the sftp service",
+            "minimum": 1024,
+            "maximum": 65535
         }
     }
 }
