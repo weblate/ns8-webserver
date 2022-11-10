@@ -27,8 +27,8 @@ buildah add "${container}" imageroot /imageroot
 buildah add "${container}" ui/dist /ui
 # Setup the entrypoint, ask to reserve one TCP port with the label and set a rootless container
 buildah config --entrypoint=/ \
-    --label="org.nethserver.authorizations=traefik@any:routeadm" \
-    --label="org.nethserver.tcp-ports-demand=3" \
+    --label="org.nethserver.authorizations=node:fwadm traefik@any:routeadm" \
+    --label="org.nethserver.tcp-ports-demand=2" \
     --label="org.nethserver.rootfull=0" \
     --label="org.nethserver.images=docker.io/nginx:1.20-alpine docker.io/drakkan/sftpgo:v2.2-alpine" \
     "${container}"
