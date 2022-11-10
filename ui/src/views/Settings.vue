@@ -29,6 +29,25 @@
               ref="path"
             >
             </cv-text-input>
+            <cv-text-input
+              :label="$t('settings.sftp_tcp_port')"
+              placeholder="3092"
+              v-model.trim="sftp_tcp_port"
+              class="mg-bottom"
+              :invalid-message="$t(error.sftp_tcp_port)"
+              :disabled="loading.getConfiguration || loading.configureModule"
+              ref="sftp_tcp_port"
+              tooltipAlignment="center"
+              tooltipDirection="right"
+            >
+              <template slot="tooltip">
+                <div
+                  v-html="
+                    $t('settings.tcp_port_archive_tooltips')
+                  "
+                ></div>
+              </template>
+            </cv-text-input>
             <cv-toggle
               value="httpToHttps"
               :label="$t('settings.http_to_https')"
@@ -75,11 +94,18 @@ import {
   UtilService,
   TaskService,
   IconService,
+  PageTitleService,
 } from "@nethserver/ns8-ui-lib";
 
 export default {
   name: "Settings",
-  mixins: [TaskService, IconService, UtilService, QueryParamService],
+  mixins: [
+    TaskService,
+    IconService,
+    UtilService,
+    QueryParamService,
+    PageTitleService,
+  ],
   pageTitle() {
     return this.$t("settings.title") + " - " + this.appName;
   },
@@ -235,6 +261,7 @@ export default {
           action: taskAction,
           data: {
             path: this.path,
+            sftp_tcp_port: parseInt(this.sftp_tcp_port),
             http2https: this.isHttpToHttpsEnabled,
           },
           extra: {
