@@ -29,7 +29,7 @@
               ref="path"
             >
             </cv-text-input>
-            <cv-text-input
+            <NsTextInput
               :label="$t('settings.sftp_tcp_port')"
               placeholder="3092"
               v-model.trim="sftp_tcp_port"
@@ -43,11 +43,11 @@
               <template slot="tooltip">
                 <div
                   v-html="
-                    $t('settings.tcp_port_archive_tooltips')
+                    $t('settings.sftp_tcp_port_tips')
                   "
                 ></div>
               </template>
-            </cv-text-input>
+            </NsTextInput>
             <cv-toggle
               value="httpToHttps"
               :label="$t('settings.http_to_https')"
