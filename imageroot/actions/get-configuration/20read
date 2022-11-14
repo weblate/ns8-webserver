@@ -27,6 +27,7 @@ import json
 import sys
 import agent
 import socket
+import subprocess
 
 configuration = {}
 vhosts = []
@@ -63,11 +64,12 @@ configuration['NextFpmPort'] = NextFpmPort
 # Find the hosname of the node
 configuration["hostname"] = socket.gethostname()
 
-# Read current configuration from Redis
-env = f'module/{os.environ["MODULE_ID"]}/environment'
-rdb = agent.redis_connect()
-configuration["sftp_tcp_port"] = int(rdb.hget(env, "SFTP_TCP_PORT"));
-configuration["path"] =  rdb.hget(env, "TRAEFIK_PATH");
-configuration["http2https"] =  rdb.hget(env, "TRAEFIK_HTTP2HTTPS") == "True";
+# Read current configuration
+configuration["sftp_tcp_port"] = int(os.environ.get("SFTP_TCP_PORT",3092))
+configuration["path"] =   os.environ.get("TRAEFIK_PATH",'/sftpgo')
+configuration["http2https"] =  os.environ.get("TRAEFIK_HTTP2HTTPS","False") == "True"
+# test if sftpgo is enabled
+sftpgo = subprocess.call(["systemctl", "is-active","--user", "--quiet", "sftpgo.service"])
+configuration["sftpgo_service"] = True if sftpgo == 0 else False
 
 json.dump(configuration, fp=sys.stdout)
