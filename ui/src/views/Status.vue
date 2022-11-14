@@ -46,7 +46,7 @@
       </cv-column>
     </cv-row>
     <cv-row>
-      <template v-if="!sftp_tcp_port">
+      <template  v-if="!sftpgo_service && ! loading.getConfiguration">
         <cv-column :md="4" :max="4">
           <NsInfoCard
             light
@@ -58,7 +58,7 @@
           <template slot="content">
             <div class="card-rows">
               <div class="card-row">
-                <NsButton kind="ghost" :icon="Launch20" @click="goToConfigureSftpgo">
+                <NsButton kind="ghost" :icon="Launch20" @click="goToAppPage(instanceName, 'settings')">
                   {{ $t("status.configure_sftpgo") }}
                 </NsButton>
               </div>
@@ -67,7 +67,7 @@
           </NsInfoCard>
         </cv-column>
       </template>
-      <template v-if="sftp_tcp_port">
+      <template  v-if="sftpgo_service && ! loading.getConfiguration">
         <cv-column :md="4" :max="4">
           <NsInfoCard
             light
@@ -396,6 +396,7 @@ export default {
       },
       path:"",
       sftp_tcp_port:"",
+      sftpgo_service: "",
       backupRepositories: [],
       backups: [],
       loading: {
@@ -458,9 +459,6 @@ export default {
     this.listBackupRepositories();
   },
   methods: {
-      goToConfigureSftpgo() {
-        this.$router.push("/settings");
-      },
       goToSftpgoAdmin() {
         window.open('http://' + this.hostname + this.path+'/web/admin/login');
       },
@@ -513,6 +511,7 @@ export default {
     getConfigurationCompleted(taskContext, taskResult) {
       const config = taskResult.output;
       this.sftp_tcp_port = config.sftp_tcp_port;
+      this.sftpgo_service = config.sftpgo_service;
       this.path = config.path
       this.hostname = config.hostname
       this.loading.getConfiguration = false;
