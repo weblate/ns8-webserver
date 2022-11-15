@@ -20,10 +20,8 @@ if str(port) == os.environ.get('SFTP_TCP_PORT',""):
     sys.exit(0)
 
 # first remove the previous port set
-if os.environ.get('SFTP_TCP_PORT', default=None) is not None:
-    agent.add_public_service(os.environ['MODULE_ID'], [
-    os.environ['SFTP_TCP_PORT'] + "/tcp", # external sftp port
-    ])
+if os.getenv('SFTP_TCP_PORT'):
+    agent.remove_public_service(os.environ['MODULE_ID'])
 
 # add the new port
 agent.add_public_service(os.environ['MODULE_ID'], [
