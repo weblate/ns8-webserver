@@ -30,6 +30,3 @@ if result == 0:
     agent.set_status('validation-failed')
     json.dump([{'field':'sftp_tcp_port','parameter':'sftp_tcp_port','value':port,'error':'tcp_port_already_used'}],fp=sys.stdout)
     sys.exit(2)
-else:
-    sys.exit(0)
-sock.close()
