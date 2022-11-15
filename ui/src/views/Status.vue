@@ -58,7 +58,7 @@
           <template slot="content">
             <div class="card-rows">
               <div class="card-row">
-                <NsButton kind="ghost" :icon="Launch20" @click="goToAppPage(instanceName, 'settings')">
+                <NsButton kind="ghost" :icon="ArrowRight20" @click="goToAppPage(instanceName, 'settings')">
                   {{ $t("status.configure_sftpgo") }}
                 </NsButton>
               </div>
