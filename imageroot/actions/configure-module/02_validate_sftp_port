@@ -10,6 +10,7 @@ import sys
 import json
 import agent
 import socket
+import errno
 
 
 # retrieve json data
@@ -28,9 +29,13 @@ if str(port) == os.environ.get('SFTP_TCP_PORT',""):
 # set error validation
 agent.set_weight(os.path.basename(__file__), 0)
 
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 try:
-    sock.bind(("", int(port)))
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.bind(('', port))
+    sock.close()
+    sock = socket.socket(socket.AF_INET6, socket.SOCK_STREAM)
+    sock.bind(('', port))
+    sock.close()
 except OSError as ex:
     if ex.errno != errno.EADDRINUSE:
         raise
