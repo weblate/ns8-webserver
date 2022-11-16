@@ -1,27 +1,22 @@
-#!/bin/bash
+#!/usr/bin/env python3
 
 #
 # Copyright (C) 2022 Nethesis S.r.l.
-# http://www.nethesis.it - nethserver@nethesis.it
-#
-# This script is part of NethServer.
-#
-# NethServer is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License,
-# or any later version.
-#
-# NethServer is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with NethServer.  If not, see COPYING.
+# SPDX-License-Identifier: GPL-3.0-or-later
 #
 
-# If the control reaches this step, the service can be enabled and started
-systemctl --user enable  webserver.service
-systemctl --user enable  sftpgo.service
-systemctl --user restart webserver.service
-systemctl --user restart sftpgo.service
+
+import os
+import subprocess
+
+
+subprocess.run(["systemctl", "--user", "enable","--now", "webserver.service"])
+subprocess.run(["systemctl", "--user", "restart", "webserver.service"])
+
+
+sftpgo_service = os.environ.get('SFTPGO_SERVICE', False)
+if sftpgo_service:
+    subprocess.run(["systemctl", "--user", "enable","--now", "sftpgo.service"])
+    subprocess.run(["systemctl", "--user", "restart", "sftpgo.service"])
+else:
+    subprocess.run(["systemctl", "--user", "disable","--now", "sftpgo.service"])

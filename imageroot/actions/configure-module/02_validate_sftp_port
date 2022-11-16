@@ -15,6 +15,11 @@ import socket
 # retrieve json data
 data = json.load(sys.stdin)
 port = data['sftp_tcp_port']
+sftpgo_service = data['sftpgo_service']
+
+# do not test if sftpgo is not enabled
+if not sftpgo_service:
+    sys.exit(0)
 
 # if we have the same port, lets go further
 if str(port) == os.environ.get('SFTP_TCP_PORT',""):

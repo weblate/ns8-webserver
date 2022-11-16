@@ -19,6 +19,8 @@ data = json.load(sys.stdin)
 
 # Setup default values
 sftp_tcp_port = data.get("sftp_tcp_port")
+sftpgo_service = data.get("sftpgo_service")
 
-# set sftp port env
+# set sftp port env and service state
 agent.set_env("SFTP_TCP_PORT",sftp_tcp_port)
+agent.set_env("SFTPGO_SERVICE",sftpgo_service)
