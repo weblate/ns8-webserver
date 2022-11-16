@@ -69,7 +69,6 @@ configuration["sftp_tcp_port"] = int(os.environ.get("SFTP_TCP_PORT",3092))
 configuration["path"] =   os.environ.get("TRAEFIK_PATH",'/sftpgo')
 configuration["http2https"] =  os.environ.get("TRAEFIK_HTTP2HTTPS","False") == "True"
 # test if sftpgo is enabled
-sftpgo = subprocess.call(["systemctl", "is-active","--user", "--quiet", "sftpgo.service"])
-configuration["sftpgo_service"] = True if sftpgo == 0 else False
+configuration["sftpgo_service"] = os.environ.get('SFTPGO_SERVICE', False) == "True"
 
 json.dump(configuration, fp=sys.stdout)
