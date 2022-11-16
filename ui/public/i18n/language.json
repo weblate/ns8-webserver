@@ -83,7 +83,7 @@
   },
   "settings": {
     "title": "Settings",
-    "sftpgo_path": "Sftpgo web application  path",
+    "sftpgo_path": "SFTPGo web application  path",
     "path_pattern": "Web path for the web application, like '/sftpgo'",
     "webpath_already_used_in_traefik": "This web path is already used by another application in the web proxy.",
     "sftp_tcp_port": "External sftp TCP port",
@@ -101,7 +101,9 @@
     "sftp_tcp_port_number_gte": "The TCP port must be greater or equal than 1024",
     "sftp_tcp_port_number_lte": "The TCP port must be lower or equal than 65535",
     "sftp_tcp_port_invalid_type": "The TCP port is not valid, it must be an integer in the range 1024-65535",
-    "tcp_port_already_used": "The TCP port is already used by another service"
+    "tcp_port_already_used": "The TCP port is already used by another service",
+    "sftpgo_switch": "Enable SFTPGo",
+    "sftpgo_explanation_tooltips": "SFTPGo is a service to provide an user interface and a sftp service for uploading your websites"
   },
   "about": {
     "title": "About"
