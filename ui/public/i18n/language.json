@@ -3,8 +3,8 @@
     "required": "Required",
     "work_in_progress": "Work in progress",
     "processing": "Processing...",
-    "enabled":"enabled",
-    "disabled":"disabled"
+    "enabled":"Enabled",
+    "disabled":"Disabled"
   },
   "status": {
     "title": "Status",
