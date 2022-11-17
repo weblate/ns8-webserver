@@ -34,14 +34,12 @@ import agent
 # If parsing fails, output everything to stderr
 data = json.load(sys.stdin)
 
-# sftp uses the first one, sftpgo uses the second random port, nginx the third one
+# sftpgo uses the second random port, nginx the third one
 env_tcp_ports = os.environ["TCP_PORTS"].split(',')
-sftp_tcp_port = env_tcp_ports[0]
-sftpgo_tcp_port = env_tcp_ports[1]
-nginx_tcp_port = env_tcp_ports[2]
+sftpgo_tcp_port = env_tcp_ports[0]
+nginx_tcp_port = env_tcp_ports[1]
 # Talk with agent using file descriptor.
 # Setup configuration from user input.
-agent.set_env("SFTP_TCP_PORT", sftp_tcp_port)
 agent.set_env("SFTPGO_TCP_PORT", sftpgo_tcp_port)
 agent.set_env("NGINX_TCP_PORT", nginx_tcp_port)
 

@@ -19,30 +19,69 @@
       <div class="bx--col-lg-16">
         <cv-tile :light="true">
           <cv-form @submit.prevent="configureModule">
-            <cv-text-input
-              :label="$t('settings.sftpgo_path')"
-              placeholder="/sftpgo"
-              v-model.trim="path"
-              class="mg-bottom"
-              :invalid-message="$t(error.path)"
+            <NsToggle
+
+              :label="$t('settings.sftpgo_switch')"
+              value="sftpgo_switch"
+              :form-item="true"
+              v-model="isSftpgoEnabled"
               :disabled="loading.getConfiguration || loading.configureModule"
-              ref="path"
-            >
-            </cv-text-input>
-            <cv-toggle
-              value="httpToHttps"
-              :label="$t('settings.http_to_https')"
-              v-model="isHttpToHttpsEnabled"
-              :disabled="loading.getConfiguration || loading.configureModule"
+              ref="sftpgo_switch"
               class="mg-bottom"
             >
-              <template slot="text-left">{{
-                $t("settings.disabled")
-              }}</template>
-              <template slot="text-right">{{
-                $t("settings.enabled")
-              }}</template>
-            </cv-toggle>
+              <template slot="tooltip">
+                <span
+                  v-html="$t('settings.sftpgo_explanation_tooltips')"
+                ></span>
+              </template>
+              <template slot="text-left">{{ $t("common.disabled") }}</template>
+              <template slot="text-right">{{ $t("common.enabled") }}</template>
+            </NsToggle>
+            <template v-if="isSftpgoEnabled">
+              <cv-text-input
+                :label="$t('settings.sftpgo_path')"
+                placeholder="/sftpgo"
+                v-model.trim="path"
+                class="mg-bottom"
+                :invalid-message="$t(error.path)"
+                :disabled="loading.getConfiguration || loading.configureModule"
+                ref="path"
+              >
+              </cv-text-input>
+              <NsTextInput
+                :label="$t('settings.sftp_tcp_port')"
+                placeholder="3092"
+                v-model.trim="sftp_tcp_port"
+                class="mg-bottom"
+                :invalid-message="$t(error.sftp_tcp_port)"
+                :disabled="loading.getConfiguration || loading.configureModule"
+                ref="sftp_tcp_port"
+                tooltipAlignment="center"
+                tooltipDirection="right"
+              >
+                <template slot="tooltip">
+                  <div
+                    v-html="
+                      $t('settings.sftp_tcp_port_tips')
+                    "
+                  ></div>
+                </template>
+              </NsTextInput>
+              <cv-toggle
+                value="httpToHttps"
+                :label="$t('settings.http_to_https')"
+                v-model="isHttpToHttpsEnabled"
+                :disabled="loading.getConfiguration || loading.configureModule"
+                class="mg-bottom"
+              >
+                <template slot="text-left">{{
+                  $t("settings.disabled")
+                }}</template>
+                <template slot="text-right">{{
+                  $t("settings.enabled")
+                }}</template>
+              </cv-toggle>
+            </template>
             <div v-if="error.configureModule" class="bx--row">
               <div class="bx--col">
                 <NsInlineNotification
@@ -75,11 +114,18 @@ import {
   UtilService,
   TaskService,
   IconService,
+  PageTitleService,
 } from "@nethserver/ns8-ui-lib";
 
 export default {
   name: "Settings",
-  mixins: [TaskService, IconService, UtilService, QueryParamService],
+  mixins: [
+    TaskService,
+    IconService,
+    UtilService,
+    QueryParamService,
+    PageTitleService,
+  ],
   pageTitle() {
     return this.$t("settings.title") + " - " + this.appName;
   },
@@ -93,6 +139,7 @@ export default {
       path: "",
       sftp_tcp_port: "",
       isHttpToHttpsEnabled: false,
+      isSftpgoEnabled: false,
       loading: {
         getConfiguration: false,
         configureModule: false,
@@ -170,6 +217,7 @@ export default {
       this.path = config.path;
       this.sftp_tcp_port = config.sftp_tcp_port;
       this.isHttpToHttpsEnabled = config.http2https;
+      this.isSftpgoEnabled = config.sftpgo_service
       this.loading.getConfiguration = false;
       this.focusElement("path");
     },
@@ -235,7 +283,9 @@ export default {
           action: taskAction,
           data: {
             path: this.path,
+            sftp_tcp_port: parseInt(this.sftp_tcp_port),
             http2https: this.isHttpToHttpsEnabled,
+            sftpgo_service: this.isSftpgoEnabled,
           },
           extra: {
             title: this.$t("settings.instance_configuration", {

@@ -19,9 +19,8 @@
                     "MaxExecutionTime": 0,
                     "MaxFileUploads": 20,
                     "port": 9001,
-                    "name":"9001"
+                    "name": "9001"
                 }
-
             ],
             "sftp_tcp_port": 20014,
             "path": "/sftpgo",
@@ -44,9 +43,11 @@
             "description": "Redirect all the HTTP requests to HTTPS"
         },
         "sftp_tcp_port": {
-            "type": "integer",
-            "title": "port",
-            "description": "The port of the phpfpm pool"
+                "type": "integer",
+                "title": "port",
+                "description": "The port of the sftp service",
+                "minimum": 1024,
+                "maximum": 65535
         },
         "path": {
             "type": "string",

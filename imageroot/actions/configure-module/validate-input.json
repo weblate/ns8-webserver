@@ -9,7 +9,9 @@
     "type": "object",
     "required": [
         "path",
-        "http2https"
+        "http2https",
+        "sftp_tcp_port",
+        "sftpgo_service"
     ],
     "properties": {
         "path": {
@@ -21,6 +23,18 @@
             "type": "boolean",
             "title": "HTTP to HTTPS redirection",
             "description": "Redirect all the HTTP requests to HTTPS"
+        },
+        "sftp_tcp_port": {
+            "type": "integer",
+            "title": "port",
+            "description": "The port of the sftp service",
+            "minimum": 1024,
+            "maximum": 65535
+        },
+        "sftpgo_service":{
+            "type": "boolean",
+            "title": "Enable or disable SFTPGO",
+            "description": "Start or stop the SFTPGO service"
         }
     }
 }

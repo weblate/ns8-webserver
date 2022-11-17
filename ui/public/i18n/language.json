@@ -3,8 +3,8 @@
     "required": "Required",
     "work_in_progress": "Work in progress",
     "processing": "Processing...",
-    "enabled":"enabled",
-    "disabled":"disabled"
+    "enabled":"Enabled",
+    "disabled":"Disabled"
   },
   "status": {
     "title": "Status",
@@ -30,7 +30,9 @@
     "sftpgo_admin_login_tips": "The default login:password is admin:admin, you must change it at the first login",
     "sftpgo_user_login_tips": "The credentials can be found in the virtualhost page",
     "sftp_tcp_port_tips": "Use SFTPGo or connect a sftp client: sftp -P {port} user@hostname",
-    "sftpgo_upload_website":"Upload your websites"
+    "sftpgo_upload_website":"Upload your websites",
+    "sftpgo_not_running": "SFTPGo is not configured",
+    "configure_sftpgo": "Configure SFTPGo"
   },
   "virtualhosts": {
     "advanced": "Advanced settings",
@@ -81,7 +83,7 @@
   },
   "settings": {
     "title": "Settings",
-    "sftpgo_path": "Sftpgo web application  path",
+    "sftpgo_path": "SFTPGo web application  path",
     "path_pattern": "Web path for the web application, like '/sftpgo'",
     "webpath_already_used_in_traefik": "This web path is already used by another application in the web proxy.",
     "sftp_tcp_port": "External sftp TCP port",
@@ -95,7 +97,13 @@
     "configuring": "Configuring...",
     "sftpgo_url": "Sftpgo web application",
     "link": "Link",
-    "sftpgo_login_tips": "The default login:password is admin:admin, you must change it at the first login"
+    "sftpgo_login_tips": "The default login:password is admin:admin, you must change it at the first login",
+    "sftp_tcp_port_number_gte": "The TCP port must be greater or equal than 1024",
+    "sftp_tcp_port_number_lte": "The TCP port must be lower or equal than 65535",
+    "sftp_tcp_port_invalid_type": "The TCP port is not valid, it must be an integer in the range 1024-65535",
+    "tcp_port_already_used": "The TCP port is already used by another service",
+    "sftpgo_switch": "SFTPGo",
+    "sftpgo_explanation_tooltips": "SFTPGo provides a user interface and a SFTP service for uploading your websites"
   },
   "about": {
     "title": "About"
