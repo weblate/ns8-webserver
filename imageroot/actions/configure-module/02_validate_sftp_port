@@ -18,6 +18,10 @@ data = json.load(sys.stdin)
 port = data['sftp_tcp_port']
 sftpgo_service = data['sftpgo_service']
 
+
+# set error validation
+agent.set_weight(os.path.basename(__file__), 0)
+
 # do not test if sftpgo is not enabled
 if not sftpgo_service:
     sys.exit(0)
@@ -25,9 +29,6 @@ if not sftpgo_service:
 # if we have the same port, lets go further
 if str(port) == os.environ.get('SFTP_TCP_PORT',""):
     sys.exit(0)
-
-# set error validation
-agent.set_weight(os.path.basename(__file__), 0)
 
 try:
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

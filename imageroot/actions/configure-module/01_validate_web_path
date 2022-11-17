@@ -32,6 +32,9 @@ data = json.load(sys.stdin)
 path=data['path']
 sftpgo_service = data['sftpgo_service']
 
+# set error validation
+agent.set_weight(os.path.basename(__file__), 0)
+
 # do not test if sftpgo is not enabled
 if not sftpgo_service:
     sys.exit(0)
@@ -40,8 +43,6 @@ if not sftpgo_service:
 if path == os.environ.get('TRAEFIK_PATH',"") or path == os.environ.get('TRAEFIK_PATH',"") + '/':
     sys.exit(0)
 
-# set error validation
-agent.set_weight(os.path.basename(__file__), 0)
 
 
 # do not verify the certificate
