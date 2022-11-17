@@ -102,8 +102,8 @@
     "sftp_tcp_port_number_lte": "The TCP port must be lower or equal than 65535",
     "sftp_tcp_port_invalid_type": "The TCP port is not valid, it must be an integer in the range 1024-65535",
     "tcp_port_already_used": "The TCP port is already used by another service",
-    "sftpgo_switch": "Enable SFTPGo",
-    "sftpgo_explanation_tooltips": "SFTPGo is a service to provide an user interface and a sftp service for uploading your websites"
+    "sftpgo_switch": "SFTPGo",
+    "sftpgo_explanation_tooltips": "SFTPGo provides a user interface and a SFTP service for uploading your websites"
   },
   "about": {
     "title": "About"
