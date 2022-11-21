@@ -46,7 +46,7 @@
       </cv-column>
     </cv-row>
     <cv-row>
-      <template  v-if="!sftpgo_service && ! loading.getConfiguration">
+      <template  v-if="!sftpgo_isrunning && ! loading.getConfiguration">
         <cv-column :md="4" :max="4">
           <NsInfoCard
             light
@@ -67,7 +67,7 @@
           </NsInfoCard>
         </cv-column>
       </template>
-      <template  v-if="sftpgo_service && ! loading.getConfiguration">
+      <template  v-if="sftpgo_isrunning && ! loading.getConfiguration">
         <cv-column :md="4" :max="4">
           <NsInfoCard
             light
@@ -396,7 +396,7 @@ export default {
       },
       path:"",
       sftp_tcp_port:"",
-      sftpgo_service: "",
+      sftpgo_isrunning: "",
       backupRepositories: [],
       backups: [],
       loading: {
@@ -511,7 +511,7 @@ export default {
     getConfigurationCompleted(taskContext, taskResult) {
       const config = taskResult.output;
       this.sftp_tcp_port = config.sftp_tcp_port;
-      this.sftpgo_service = config.sftpgo_service;
+      this.sftpgo_isrunning = config.sftpgo_isrunning;
       this.path = config.path
       this.hostname = config.hostname
       this.loading.getConfiguration = false;
