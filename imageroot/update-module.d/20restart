@@ -28,12 +28,8 @@ import agent
 # expand configuration
 subprocess.run(["systemctl", "--user", "restart", "webserver.service"])
 
-sftpgo_service = os.environ.get('SFTPGO_SERVICE', False) == "True"
-if sftpgo_service:
-    agent.run_helper("systemctl", "--user", "enable","--now", "sftpgo.service").check_returncode()
-    agent.run_helper("systemctl", "--user", "restart", "sftpgo.service").check_returncode()
-else:
-    agent.run_helper("systemctl", "--user", "disable","--now", "sftpgo.service").check_returncode()
+agent.run_helper("systemctl", "--user", "enable","--now", "sftpgo.service").check_returncode()
+agent.run_helper("systemctl", "--user", "restart", "sftpgo.service").check_returncode()
 
 # detect if a service has configurations, hence start it
 PhpServiceArray = glob.glob('php*-fpm-custom.d')
