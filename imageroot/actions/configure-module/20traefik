@@ -35,11 +35,6 @@ data = json.load(sys.stdin)
 # Setup default values
 path = data.get("path")
 h2hs = data.get("http2https", True)
-sftpgo_service = data['sftpgo_service']
-
-# exit if sftpgo is not enabled
-if not sftpgo_service:
-    sys.exit(0)
 
 # Talk with agent using file descriptor.
 # Setup configuration from user input.

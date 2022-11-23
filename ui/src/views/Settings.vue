@@ -19,25 +19,7 @@
       <div class="bx--col-lg-16">
         <cv-tile :light="true">
           <cv-form @submit.prevent="configureModule">
-            <NsToggle
-
-              :label="$t('settings.sftpgo_switch')"
-              value="sftpgo_switch"
-              :form-item="true"
-              v-model="isSftpgoEnabled"
-              :disabled="loading.getConfiguration || loading.configureModule"
-              ref="sftpgo_switch"
-              class="mg-bottom"
-            >
-              <template slot="tooltip">
-                <span
-                  v-html="$t('settings.sftpgo_explanation_tooltips')"
-                ></span>
-              </template>
-              <template slot="text-left">{{ $t("common.disabled") }}</template>
-              <template slot="text-right">{{ $t("common.enabled") }}</template>
-            </NsToggle>
-            <template v-if="isSftpgoEnabled">
+            <template>
               <cv-text-input
                 :label="$t('settings.sftpgo_path')"
                 placeholder="/sftpgo"
@@ -67,6 +49,23 @@
                   ></div>
                 </template>
               </NsTextInput>
+              <NsToggle
+                :label="$t('settings.sftpgo_restrict_port_access')"
+                value="sftpgo_switch"
+                :form-item="true"
+                v-model="isSftpgoPortEnabled"
+                :disabled="loading.getConfiguration || loading.configureModule"
+                ref="sftpgo_switch"
+                class="mg-bottom"
+              >
+                <template slot="tooltip">
+                  <span
+                    v-html="$t('settings.sftpgo_explanation_tooltips')"
+                  ></span>
+                </template>
+                <template slot="text-left">{{ $t("common.disabled") }}</template>
+                <template slot="text-right">{{ $t("common.enabled") }}</template>
+              </NsToggle>
               <cv-toggle
                 value="httpToHttps"
                 :label="$t('settings.http_to_https')"
@@ -139,7 +138,7 @@ export default {
       path: "",
       sftp_tcp_port: "",
       isHttpToHttpsEnabled: false,
-      isSftpgoEnabled: false,
+      isSftpgoPortEnabled: false,
       loading: {
         getConfiguration: false,
         configureModule: false,
@@ -217,7 +216,7 @@ export default {
       this.path = config.path;
       this.sftp_tcp_port = config.sftp_tcp_port;
       this.isHttpToHttpsEnabled = config.http2https;
-      this.isSftpgoEnabled = config.sftpgo_service
+      this.isSftpgoPortEnabled = config.sftpgo_service
       this.loading.getConfiguration = false;
       this.focusElement("path");
     },
@@ -285,7 +284,7 @@ export default {
             path: this.path,
             sftp_tcp_port: parseInt(this.sftp_tcp_port),
             http2https: this.isHttpToHttpsEnabled,
-            sftpgo_service: this.isSftpgoEnabled,
+            sftpgo_service: this.isSftpgoPortEnabled,
           },
           extra: {
             title: this.$t("settings.instance_configuration", {

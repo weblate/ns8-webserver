@@ -36,13 +36,19 @@
                 <DataBase32 />
               </template>
               <template #description>
-                <div>{{ $t("virtualhosts.empty_state_virtualhost_description") }}</div>
-                <NsButton
+                <div>{{ sftpgo_isrunning ? $t("virtualhosts.empty_state_virtualhost_description") : $t("virtualhosts.sftpgo_is_not_running_description")}}</div>
+                <NsButton v-if="sftpgo_isrunning"
                   kind="primary"
                   :icon="Add20"
                   @click="showCreateVhostModal()"
                   class="empty-state-button"
                   >{{ $t("virtualhosts.create_virtualhost") }}
+                </NsButton>
+                <NsButton v-else
+                  kind="ghost" 
+                  :icon="ArrowRight20" 
+                  @click="goToAppPage(instanceName, 'settings')"
+                  >{{ $t("virtualhosts.configure_sftpgo") }}
                 </NsButton>
               </template>
             </NsEmptyState>
@@ -355,6 +361,7 @@ export default {
       isShownCreateVhostModal: false,
       isShownDeleteVhostModal: false,
       path:"",
+      sftpgo_isrunning: false,
       letsencrypt:"",
       http2https:"",
       indexes:"",
@@ -504,6 +511,7 @@ export default {
       this.virtualhost = config.virtualhost;
       this.NextFpmPort = config.NextFpmPort;
       this.sftp_tcp_port = config.sftp_tcp_port;
+      this.sftpgo_isrunning = config.sftpgo_isrunning;
       this.path = config.path
       this.hostname = config.hostname
       this.loading.getConfiguration = false;
