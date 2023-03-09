@@ -10,5 +10,5 @@ import os
 import agent
 
 agent.run_helper("systemctl", "--user", "restart", "webserver.service").check_returncode()
-agent.run_helper("systemctl", "--user", "enable","--now", "sftpgo.service").check_returncode()
+agent.run_helper("systemctl", "--user", "enable", "sftpgo.service").check_returncode()
 agent.run_helper("systemctl", "--user", "restart", "sftpgo.service").check_returncode()
