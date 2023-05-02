@@ -78,11 +78,11 @@
         "title": "Informazioni"
     },
     "common": {
-        "disabled": "",
+        "disabled": "Disabilitato",
         "processing": "Elaborazione in corso...",
         "work_in_progress": "In lavorazione",
         "required": "Obbligatorio",
-        "enabled": ""
+        "enabled": "Enabled"
     },
     "virtualhosts": {
         "create_virtualhost": "",
