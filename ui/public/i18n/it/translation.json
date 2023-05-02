@@ -30,7 +30,7 @@
     "settings": {
         "sftpgo_explanation_tooltips": "",
         "title": "Impostazioni",
-        "enabled": "",
+        "enabled": "Abilitato",
         "link": "",
         "instance_configuration": "",
         "tcp_port_already_used": "",
@@ -39,17 +39,17 @@
         "webpath_already_used_in_traefik": "",
         "sftp_tcp_port": "",
         "sftpgo_restrict_port_access": "",
-        "configuring": "",
+        "configuring": "Configurazione...",
         "sftpgo_path": "",
         "sftpgo_url": "",
         "sftp_tcp_port_number_gte": "",
         "sftp_tcp_port_invalid_type": "",
         "sftp_tcp_port_tips": "",
-        "http_to_https": "",
-        "lets_encrypt": "",
+        "http_to_https": "Da HTTP a HTTPS",
+        "lets_encrypt": "Let's Encrypt",
         "sftpgo_login_tips": "",
         "sftp_tcp_port_number_lte": "",
-        "disabled": ""
+        "disabled": "Disabilitato"
     },
     "action": {
         "get-module-info": "Visualizza info modulo",
@@ -82,7 +82,7 @@
         "processing": "Elaborazione in corso...",
         "work_in_progress": "In lavorazione",
         "required": "Obbligatorio",
-        "enabled": "Enabled"
+        "enabled": "Abilitato"
     },
     "virtualhosts": {
         "create_virtualhost": "",
