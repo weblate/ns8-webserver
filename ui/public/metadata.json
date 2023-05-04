@@ -1,7 +1,8 @@
 {
-  "name": "Webserver",
+  "name": "WebServer",
   "description": {
-    "en": "Install a nginx server with php-fpm"
+    "en": "NGINX web server with php-fpm stack",
+    "it": "Server web NGINX con stack php-fpm"
   },
   "categories": [],
   "authors": [
