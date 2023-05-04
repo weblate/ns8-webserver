@@ -39,7 +39,7 @@
     "Create_Virtualhosts":"Create a virtual host",
     "ServerNames":"Virtual host names (FQDN)",
     "Write_DomainNames":"Only allowed [A-Wa-w0-9-.]",
-    "lets_encrypt":"Request for a lets encrypt certificate",
+    "lets_encrypt":"Request for a Let's Encrypt certificate",
     "http_to_https":"Require SSL encrypted connection",
     "enabled":"Enabled",
     "disabled":"Disabled",
