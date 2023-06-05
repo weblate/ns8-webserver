@@ -223,6 +223,7 @@
             <cv-dropdown-item value="7.4">{{$t('virtualhosts.PHP_74')}}</cv-dropdown-item>
             <cv-dropdown-item value="8.0">{{$t('virtualhosts.PHP_80')}}</cv-dropdown-item>
             <cv-dropdown-item value="8.1">{{$t('virtualhosts.PHP_81')}}</cv-dropdown-item>
+            <cv-dropdown-item value="8.2">{{$t('virtualhosts.PHP_82')}}</cv-dropdown-item>
           </cv-dropdown>
           <!-- advanced options -->
           <cv-accordion ref="accordion">
