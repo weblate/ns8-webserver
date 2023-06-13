@@ -35,6 +35,8 @@ if PhpVersion:
     os.makedirs('php'+str(PhpVersion)+'-fpm-custom.d', exist_ok=True)
     # expand configuration
     subprocess.run(["systemctl", "--user", "reload", "nginx.service"])
+    # pull the image if missing
+    subprocess.run(["download-php-fpm",str(PhpVersion)])
     # start the container  if stopped
     subprocess.run(["systemctl", "--user", "enable", "--now", "phpfpm@"+str(PhpVersion)+".service"])
 else:

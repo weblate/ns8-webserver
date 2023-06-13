@@ -47,7 +47,8 @@ if PhpVersion:
         ListConfigurations = glob.glob(folder+'/*.conf')
         if not ListConfigurations :
             subprocess.run(["systemctl", "--user", "disable","--now", "phpfpm@"+ConfiguredServices[0].replace('php','')+".service"])
-
+    # pull the image if missing
+    subprocess.run(["download-php-fpm",str(PhpVersion)])
     # start the container  if stopped
     subprocess.run(["systemctl", "--user", "enable", "--now", "phpfpm@"+str(PhpVersion)+".service"])
     subprocess.run(["systemctl", "--user", "reload", "phpfpm@\*.service"])
