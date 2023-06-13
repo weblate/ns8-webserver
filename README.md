@@ -2,6 +2,10 @@
 
 This module use nginx and php-fpm to make a a linux apache mysql (see ns8-mariadb) and php
 
+# update PHP or add new versions
+
+To add new version inside the UI go to ui/src/views/VirtualHosts.vue in the php dropdown. The UI uses the minor version 8.1 but we need to pull the phpfpm container 8.1.30. This is done in imageroot/bin/download-php-fpm, please upgrade from time to time the php version wanted there, the upgrade script imageroot/update-module.d/20restart will pull and restart phpfpm service.
+
 ## local database
 
 We use local database to store configuration, you can find it `/home/webserver*/.config/state/databases/vhosts/*.ini`, the TCP port of php-fpm which is unique, is used as an ID, so the first vhost configuration databse will be at 
