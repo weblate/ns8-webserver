@@ -1,0 +1,28 @@
+#!/bin/bash
+
+#
+# Copyright (C) 2022 Nethesis S.r.l.
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+set -e
+# we download image and tag it with major version
+
+minor_version="${1:?We expect one argument}"
+
+declare -A version_map
+
+version_map[7.4]=7.4.33
+version_map[8.0]=8.0.29
+version_map[8.1]=8.1.20
+version_map[8.2]=8.2.7
+# Check if major_version is mapped properly
+if [[ -z "${version_map[$minor_version]}" ]]; then
+    echo "PHP version $minor_version is not supported" 1>&2
+    exit 1
+fi
+
+# pull the image
+podman-pull-missing "docker.io/bitnami/php-fpm:${version_map[$minor_version]}"
+# systemd service use docker.io/bitnami/php-fpm:8.1 
+# we need to tag with major version to use it locally
+/usr/bin/podman tag  "docker.io/bitnami/php-fpm:${version_map[$minor_version]}" "docker.io/bitnami/php-fpm:${minor_version}"
