@@ -7,29 +7,22 @@
 set -e
 # we download image and tag it with major version
 
-if [[ $# -ne 1 ]]; then
-    echo "We expect one argument"
-    exit 1
-fi
+major_version="${1:?We expect one argument}"
 
+declare -A version_map
 
-major_version=$1
-
-if [[ $major_version == "7.4" ]]; then
-    minor_version="7.4.33"
-elif [[ $major_version == "8.0" ]]; then
-    minor_version="8.0.29"
-elif [[ $major_version == "8.1" ]]; then
-    minor_version="8.1.20"
-elif [[ $major_version == "8.2" ]]; then
-    minor_version="8.2.7"
-else
-    echo "We expect a major php version (7.4,8.0,8.1,8.2)"
+version_map[7.4]=7.4.33
+version_map[8.0]=8.0.29
+version_map[8.1]=8.1.20
+version_map[8.2]=8.2.7
+# Check if major_version is mapped properly
+if [[ -z "${version_map[$major_version]}" ]]; then
+    echo "PHP version $major_version is not supported" 1>&2
     exit 1
 fi
 
 # pull the image
-/usr/bin/podman pull docker.io/bitnami/php-fpm:${minor_version}
+podman-pull-missing "docker.io/bitnami/php-fpm:${version_map[$major_version]}"
 # systemd service use docker.io/bitnami/php-fpm:8.1 
 # we need to tag with major version to use it locally
-/usr/bin/podman tag  docker.io/bitnami/php-fpm:${minor_version} docker.io/bitnami/php-fpm:${major_version}
+/usr/bin/podman tag  "docker.io/bitnami/php-fpm:${version_map[$major_version]}" "docker.io/bitnami/php-fpm:${major_version}"
