@@ -131,7 +131,8 @@
         "ServerNames_format": "Nome di dominio non consentito: {error}",
         "PHP_81": "PHP 8.1",
         "Disable_virtual_Host": "Disabilitazione dell'host virtuale",
-        "empty_state_virtualhost_description": "È necessario creare un host virtuale facendo clic sul pulsante seguente"
+        "empty_state_virtualhost_description": "È necessario creare un host virtuale facendo clic sul pulsante seguente",
+        "PHP_82": "PHP 8.2"
     },
     "task": {
         "cannot_create_task": "Impossibile eseguire task {action}"
