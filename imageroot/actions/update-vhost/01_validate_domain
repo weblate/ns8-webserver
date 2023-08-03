@@ -62,6 +62,13 @@ def testUrl(domain):
     if domain in hosts:
         return
     else:
+        # test if domain == fqdn of server -> error we exit
+        fqdn=agent.get_hostname()
+        if domain == fqdn:
+            # fqdn server used by vhost -> nok
+            agent.set_status('validation-failed')
+            json.dump([{'field':'ServerNames','parameter':'ServerNames','value':domain,'error':'cannot_use_fqdn_of_server'}],fp=sys.stdout)
+            sys.exit(2)
         # try on http
         try:
             req = urllib.request.Request('http://127.0.0.1')
