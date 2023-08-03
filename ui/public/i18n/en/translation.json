@@ -81,6 +81,7 @@
     "sftpgo_url": "SFTPGo WebClient",
     "sftpgo_login_tips": "The default login:password is {user}:{user}, you must change it at the first login",
     "domain_already_used_in_traefik": "Domain name already used: {error}",
+    "cannot_use_fqdn_of_server": "Domain name already used by the server FQDN: {error}",
     "configure_sftpgo": "Configure SFTPGo",
     "sftpgo_is_not_running_description": "SFTPGo is not running you must configure it by clicking the button below"
   },
