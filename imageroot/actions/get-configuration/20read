@@ -26,7 +26,7 @@ import configparser
 import json
 import sys
 import subprocess
-import socket
+import agent
 
 configuration = {}
 vhosts = []
@@ -61,7 +61,7 @@ fp.close()
 configuration['NextFpmPort'] = NextFpmPort
 
 # Find the hosname of the node
-configuration["hostname"] = socket.gethostname()
+configuration["hostname"] = agent.get_hostname()
 
 # Read current configuration
 configuration["sftp_tcp_port"] = int(os.environ.get("SFTP_TCP_PORT",3092))
