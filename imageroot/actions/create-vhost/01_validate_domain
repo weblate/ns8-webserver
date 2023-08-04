@@ -48,8 +48,8 @@ def testUrl(domain):
     ctx.verify_mode = ssl.CERT_NONE
 
     # test if domain == fqdn of server -> error we exit
-    fqdn=agent.get_hostname()
-    if domain == fqdn:
+    fqdn=agent.get_hostname().lower()
+    if domain.lower() == fqdn:
         # fqdn server used by vhost -> nok
         agent.set_status('validation-failed')
         json.dump([{'field':'ServerNames','parameter':'ServerNames','value':domain,'error':'cannot_use_fqdn_of_server'}],fp=sys.stdout)
