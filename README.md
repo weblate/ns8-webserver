@@ -28,7 +28,20 @@ We use local database to store configuration, you can find it `/home/webserver*/
 If you want to upload files to the virtualhost:
 `sftp -P SFTP_TCP_PORT 9001@foo.com`
 
-
+once connected you could use some scp command
+```
+lls # ls the local file system
+ls # ls the remote file system
+lcd # change directory on the local path
+cd # change directory of remote file system
+put -r * # scp all local files to the remote folder (cp folders recusively) 
+```
+so to send all local files once connected (default password is 9001) 
+```
+sftp -P 3092 9001@foo.domain.org
+lcd /path/files
+put -r *
+```
 ### Create API key
 
 Sftpgo has a rest api that we can use by an API key, this is how we created it
