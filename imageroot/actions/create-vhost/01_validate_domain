@@ -46,6 +46,14 @@ def testUrl(domain):
     ctx = ssl.create_default_context()
     ctx.check_hostname = False
     ctx.verify_mode = ssl.CERT_NONE
+
+    # test if domain == fqdn of server -> error we exit
+    fqdn=agent.get_hostname().lower()
+    if domain.lower() == fqdn:
+        # fqdn server used by vhost -> nok
+        agent.set_status('validation-failed')
+        json.dump([{'field':'ServerNames','parameter':'ServerNames','value':domain,'error':'cannot_use_fqdn_of_server'}],fp=sys.stdout)
+        sys.exit(2)
     # try on http
     try:
         req = urllib.request.Request('http://127.0.0.1')
@@ -62,6 +70,7 @@ def testUrl(domain):
     except urllib.error.HTTPError as d:
         https = d.code
 
+
     if http == 404 and  https == 404:
         # there is no website on http or https -> OK
         return
@@ -73,4 +82,3 @@ def testUrl(domain):
 
 for host in ServerNames:
     testUrl(host)
-
