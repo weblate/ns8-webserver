@@ -54,10 +54,10 @@
         "sftpgo_not_running": "SFTPGo no está configurado",
         "open_web_client_page": "Abrir el cliente web SFTPGo",
         "sftpgo_user_login_tips": "Las credenciales se pueden encontrar en la página del host virtual",
-        "created": "Creado",
+        "created": "Created",
         "sftpgo_admin_url": "Administración Web SFTPGo",
-        "size": "Tamaño",
-        "name": "Nombre",
+        "size": "Size",
+        "name": "Name",
         "no_images": "No hay imágenes",
         "app_volumes": "Volúmen de aplicación | Volúmenes de aplicaciones",
         "services": "Servicio | Servicios",
@@ -79,7 +79,7 @@
         "open_web_admin_page": "Abrir administración web SFTPGo"
     },
     "error": {
-        "403": "Operación no autorizada",
+        "403": "Operation not authorized",
         "cannot_retrieve_installed_modules": "No es posible recibir los módulos instalados",
         "401": "Autenticación no válida",
         "cannot_retrieve_module_info": "No es posible recibir la información del módulo",
@@ -91,7 +91,7 @@
         "validation_error": "Error de validación"
     },
     "common": {
-        "required": "Obligatorio",
+        "required": "Required",
         "work_in_progress": "Trabajo en curso",
         "processing": "Procesando...",
         "disabled": "Deshabilitado",
