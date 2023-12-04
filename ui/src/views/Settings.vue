@@ -22,7 +22,7 @@
             <template>
               <NsTextInput
                 :label="$t('settings.sftpgo_path')"
-                :placeholder="$t('settings.for_example')+' /sftpgo'"
+                :placeholder="$t('common.eg_value', {value: '/sftpgo'})"
                 v-model.trim="path"
                 class="mg-bottom"
                 :invalid-message="$t(error.path)"
