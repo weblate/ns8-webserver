@@ -4,7 +4,8 @@
     "work_in_progress": "Work in progress",
     "processing": "Processing...",
     "enabled":"Enabled",
-    "disabled":"Disabled"
+    "disabled":"Disabled",
+    "eg_value": "E.g. {value}"
   },
   "status": {
     "title": "Status",
