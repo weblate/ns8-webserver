@@ -91,7 +91,7 @@
     "path_pattern": "Web path for the web application, like '/sftpgo'",
     "webpath_already_used_in_traefik": "This web path is already used by another application in the web proxy.",
     "sftp_tcp_port": "External sftp TCP port",
-    "sftp_tcp_port_tips": "This port is needed to connect a sftp client to the sftp server: sftp -P port_number user@hostname",
+    "sftp_tcp_port_tips": "This port is needed to connect a sftp client to the sftp server: sftp -P {port} user@hostname",
     "save": "Save",
     "lets_encrypt": "Let's Encrypt",
     "http_to_https": "HTTP to HTTPS",
