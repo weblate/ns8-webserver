@@ -4,7 +4,8 @@
     "work_in_progress": "Work in progress",
     "processing": "Processing...",
     "enabled":"Enabled",
-    "disabled":"Disabled"
+    "disabled":"Disabled",
+    "eg_value": "E.g. {value}"
   },
   "status": {
     "title": "Status",
@@ -108,8 +109,7 @@
     "tcp_port_already_used": "The TCP port is already used by another service",
     "sftpgo_restrict_port_access": "SFTPGo external access",
     "sftpgo_explanation_tooltips": "SFTPGo provides a user interface and a SFTP service for uploading your websites",
-    "sftpgo_path_tips": "Enter a unique HTTP path, for example '/sftpgo'",
-    "for_example": "For example"
+    "sftpgo_path_tips": "Enter a unique HTTP path, for example '/sftpgo'"
   },
   "about": {
     "title": "About"
