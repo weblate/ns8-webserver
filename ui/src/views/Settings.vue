@@ -20,16 +20,25 @@
         <cv-tile :light="true">
           <cv-form @submit.prevent="configureModule">
             <template>
-              <cv-text-input
+              <NsTextInput
                 :label="$t('settings.sftpgo_path')"
-                placeholder="/sftpgo"
+                placeholder="e.g. /sftpgo"
                 v-model.trim="path"
                 class="mg-bottom"
                 :invalid-message="$t(error.path)"
                 :disabled="loading.getConfiguration || loading.configureModule"
                 ref="path"
+                tooltipAlignment="center"
+                tooltipDirection="right"
               >
-              </cv-text-input>
+                <template slot="tooltip">
+                  <div
+                    v-html="
+                      $t('settings.sftpgo_path_tips')
+                    "
+                  ></div>
+                </template>
+              </NsTextInput>
               <NsTextInput
                 :label="$t('settings.sftp_tcp_port')"
                 placeholder="3092"
