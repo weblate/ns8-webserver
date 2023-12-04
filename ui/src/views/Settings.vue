@@ -32,7 +32,7 @@
               </cv-text-input>
               <NsTextInput
                 :label="$t('settings.sftp_tcp_port')"
-                placeholder="e.g. 3092"
+                :placeholder="$t('common.eg_value', {value: '3092'})"
                 type="number"
                 v-model.trim="sftp_tcp_port"
                 class="mg-bottom"
