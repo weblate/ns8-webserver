@@ -45,7 +45,7 @@
                 <template slot="tooltip">
                   <div
                     v-html="
-                      $t('settings.sftp_tcp_port_tips', {port: sftp_tcp_port})
+                      $t('settings.sftp_tcp_port_tips', {port: sftp_tcp_port || 'tcp_port'})
                     "
                   ></div>
                 </template>
