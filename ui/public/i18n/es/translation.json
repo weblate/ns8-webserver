@@ -120,7 +120,8 @@
         "tcp_port_already_used": "El puerto TCP ya está siendo utilizado por otro servicio",
         "title": "Ajustes",
         "sftpgo_restrict_port_access": "Acceso externo SFTPGo",
-        "sftp_tcp_port_invalid_type": "El puerto TCP no es válido, debe ser un número entero en el rango 1024-65535"
+        "sftp_tcp_port_invalid_type": "El puerto TCP no es válido, debe ser un número entero en el rango 1024-65535",
+        "sftpgo_path_tips": "Enter a unique HTTP path, for example '/sftpgo'"
     },
     "about": {
         "title": "Acerca de"
