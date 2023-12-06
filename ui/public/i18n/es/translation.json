@@ -95,7 +95,8 @@
         "work_in_progress": "En progreso",
         "processing": "Procesando...",
         "disabled": "Deshabilitado",
-        "enabled": "Habilitado"
+        "enabled": "Habilitado",
+        "eg_value": "E.g. {value}"
     },
     "settings": {
         "sftp_tcp_port": "Puerto TCP externo SFTP",
