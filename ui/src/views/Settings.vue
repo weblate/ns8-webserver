@@ -32,7 +32,8 @@
               </cv-text-input>
               <NsTextInput
                 :label="$t('settings.sftp_tcp_port')"
-                placeholder="3092"
+                :placeholder="$t('common.eg_value', {value: '3092'})"
+                type="number"
                 v-model.trim="sftp_tcp_port"
                 class="mg-bottom"
                 :invalid-message="$t(error.sftp_tcp_port)"
@@ -44,7 +45,7 @@
                 <template slot="tooltip">
                   <div
                     v-html="
-                      $t('settings.sftp_tcp_port_tips')
+                      $t('settings.sftp_tcp_port_tips', {port: sftp_tcp_port || '{tcp_port}'})
                     "
                   ></div>
                 </template>
@@ -214,7 +215,7 @@ export default {
     getConfigurationCompleted(taskContext, taskResult) {
       const config = taskResult.output;
       this.path = config.path;
-      this.sftp_tcp_port = config.sftp_tcp_port;
+      this.sftp_tcp_port = config.sftp_tcp_port.toString();
       this.isHttpToHttpsEnabled = config.http2https;
       this.isSftpgoPortEnabled = config.sftpgo_service
       this.loading.getConfiguration = false;
