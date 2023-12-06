@@ -49,7 +49,8 @@
         "lets_encrypt": "Let's Encrypt",
         "sftpgo_login_tips": "La login:password predefinita è admin:admin, è necessario cambiarla al primo accesso",
         "sftp_tcp_port_number_lte": "La porta TCP deve essere inferiore o uguale a 65535",
-        "disabled": "Disabilitato"
+        "disabled": "Disabilitato",
+        "sftpgo_path_tips": "Enter a unique HTTP path, for example '/sftpgo'"
     },
     "action": {
         "get-module-info": "Visualizza info modulo",
