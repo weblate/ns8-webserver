@@ -82,7 +82,8 @@
         "processing": "Elaborazione in corso...",
         "work_in_progress": "In lavorazione",
         "required": "Obbligatorio",
-        "enabled": "Abilitato"
+        "enabled": "Abilitato",
+        "eg_value": "E.g. {value}"
     },
     "virtualhosts": {
         "create_virtualhost": "Crea un host virtuale",
