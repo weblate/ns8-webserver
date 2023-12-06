@@ -52,7 +52,7 @@
         "path": {
             "type": "string",
             "description": "web path for the web application, like '/sftpgo'",
-            "pattern": "^/?[a-zA-Z0-9_-]+/?$"
+            "pattern": "^$|^/[a-zA-Z0-9_-]+"
         },
         "hostname": {
             "description": "Host name of the node, like 'foo.domain.com'",
