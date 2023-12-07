@@ -49,7 +49,8 @@
         "lets_encrypt": "Let's Encrypt",
         "sftpgo_login_tips": "La login:password predefinita è admin:admin, è necessario cambiarla al primo accesso",
         "sftp_tcp_port_number_lte": "La porta TCP deve essere inferiore o uguale a 65535",
-        "disabled": "Disabilitato"
+        "disabled": "Disabilitato",
+        "sftpgo_path_tips": "Enter a unique HTTP path, for example '/sftpgo'"
     },
     "action": {
         "get-module-info": "Visualizza info modulo",
@@ -82,7 +83,8 @@
         "processing": "Elaborazione in corso...",
         "work_in_progress": "In lavorazione",
         "required": "Obbligatorio",
-        "enabled": "Abilitato"
+        "enabled": "Abilitato",
+        "eg_value": "E.g. {value}"
     },
     "virtualhosts": {
         "create_virtualhost": "Crea un host virtuale",
@@ -132,7 +134,8 @@
         "PHP_81": "PHP 8.1",
         "Disable_virtual_Host": "Disabilitazione dell'host virtuale",
         "empty_state_virtualhost_description": "È necessario creare un host virtuale facendo clic sul pulsante seguente",
-        "PHP_82": "PHP 8.2"
+        "PHP_82": "PHP 8.2",
+        "cannot_use_fqdn_of_server": "Domain name already used by the server FQDN: {error}"
     },
     "task": {
         "cannot_create_task": "Impossibile eseguire task {action}"
