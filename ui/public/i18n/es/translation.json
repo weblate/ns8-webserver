@@ -96,7 +96,7 @@
         "processing": "Procesando...",
         "disabled": "Deshabilitado",
         "enabled": "Habilitado",
-        "eg_value": "E.g. {value}"
+        "eg_value": "Ejemplo {value}"
     },
     "settings": {
         "sftp_tcp_port": "Puerto TCP externo SFTP",
@@ -107,7 +107,7 @@
         "webpath_already_used_in_traefik": "Esta ruta web ya la utiliza otra aplicación en el proxy web.",
         "instance_configuration": "Configuración de {instance}",
         "http_to_https": "HTTP a HTTPS",
-        "sftp_tcp_port_tips": "Este puerto es necesario para conectar un cliente SFTP al servidor SFTP: sftp -P número_puerto usuario@nombrehost",
+        "sftp_tcp_port_tips": "Este puerto es necesario para conectar un cliente SFTP al servidor SFTP: sftp -P {port} usuario@nombrehost",
         "sftp_tcp_port_number_lte": "El puerto TCP debe ser inferior o igual a 65535",
         "sftpgo_url": "Aplicación web SFTPGo",
         "sftpgo_explanation_tooltips": "SFTPGo proporciona una interfaz de usuario y un servicio SFTP para cargar tus sitios web",
@@ -121,16 +121,16 @@
         "title": "Ajustes",
         "sftpgo_restrict_port_access": "Acceso externo SFTPGo",
         "sftp_tcp_port_invalid_type": "El puerto TCP no es válido, debe ser un número entero en el rango 1024-65535",
-        "sftpgo_path_tips": "Enter a unique HTTP path, for example '/sftpgo'"
+        "sftpgo_path_tips": "Escribe una ruta HTTP única, por ejemplo '/sftpgo'"
     },
     "about": {
         "title": "Acerca de"
     },
     "action": {
-        "list-backup-repositories": "Lista de repositorios de la copia de seguridad",
+        "list-backup-repositories": "Mostrar repositorios de la copia de seguridad",
         "get-module-info": "Obtener información del módulo",
         "list-installed-modules": "Lista de módulos instalados",
-        "list-backups": "Lista de las copias de seguridad",
+        "list-backups": "Mostrar las copias de seguridad",
         "get-status": "Obtener el estado",
         "destroy-vhost": "Eliminando host virtual",
         "configure-module": "Configurar módulo",
