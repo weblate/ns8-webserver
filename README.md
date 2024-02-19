@@ -8,16 +8,25 @@ To add new version inside the UI go to ui/src/views/VirtualHosts.vue in the php 
 
 ## local database
 
-We use local database to store configuration, you can find it `/home/webserver*/.config/state/databases/vhosts/*.ini`, the TCP port of php-fpm which is unique, is used as an ID, so the first vhost configuration databse will be at 
+We use local database to store configuration, you can find it `/home/webserver1/.config/state/databases/vhosts/*.ini`, the TCP port of php-fpm which is unique, is used as an ID, so the first vhost configuration databse will be at 
 
- `/home/webserver*/.config/state/databases/vhosts/9001.ini`
+ `/home/webserver1/.config/state/databases/vhosts/9001.ini`
 
  Manual customisation can be added to 
 
- nginx: add a dyn-9001.custom to `/home/webserver*/.config/state/conf.d/
- php-fpm:  add dyn-9001.custom to  `/home/webserver*/.config/state/php{php version}-fpm-custom.d/ for example `/home/webserver*/.config/state/php7.4-fpm-custom.d/
+### nginx
 
- ## sftpgo
+- add a `dyn-9001.custom` to `/home/webserver1/.config/state/conf.d/`
+- `vim /home/webserver1/.config/state/conf.d/dyn-9001.custom` and write a valid nginx configuration
+- set the file ownership to webserver1 : `chown webserver1:webserver1 /home/webserver1/.config/state/conf.d/dyn-9001.custom`
+
+### php-fpm
+
+- add `dyn-9001.custom` to  `/home/webserver1/.config/state/php{php version}-fpm-custom.d/` for example `/home/webserver1/.config/state/php7.4-fpm-custom.d/`
+- `vim /home/webserver1/.config/state/php7.4-fpm-custom.d/dyn-9001.custom` and wriite a valid php-fpm configuration
+- set the file ownership to webserver1 : `chown webserver1:webserver1 /home/webserver1/.config/state/php7.4-fpm-custom.d/dyn-9001.custom`
+  
+## sftpgo
 
  Sftpgo is used to upload files to the webserver, once the webserver module is installed the default password and user are admin:admin at http://foo.com/sftpgo/, think to change it
 
