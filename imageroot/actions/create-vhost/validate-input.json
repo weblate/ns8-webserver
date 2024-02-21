@@ -41,9 +41,10 @@
         "ServerNames": {
             "type": "array",
             "items": {
-            "type": "string",
-            "format":"hostname"
-        },
+                "type": "string",
+                "format": "hostname",
+                "pattern": "\\."
+            },
             "title": "ServerNames",
             "description": "Fully qualified domain names as virtualhost."
         },
