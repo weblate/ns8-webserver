@@ -135,7 +135,8 @@
         "Disable_virtual_Host": "Disabilitazione dell'host virtuale",
         "empty_state_virtualhost_description": "È necessario creare un host virtuale facendo clic sul pulsante seguente",
         "PHP_82": "PHP 8.2",
-        "cannot_use_fqdn_of_server": "Domain name already used by the server FQDN: {error}"
+        "cannot_use_fqdn_of_server": "Domain name already used by the server FQDN: {error}",
+        "ServerNames_pattern": "Must be a valid fully qualified domain name: {error}"
     },
     "task": {
         "cannot_create_task": "Impossibile eseguire task {action}"
