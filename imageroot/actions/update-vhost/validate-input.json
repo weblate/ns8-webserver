@@ -42,7 +42,8 @@
             "type": "array",
             "items": {
                 "type": "string",
-                "format": "hostname"
+                "format": "hostname",
+                "pattern": "\\."
             },
             "title": "ServerNames",
             "description": "Fully qualified domain names as virtualhost."
