@@ -48,7 +48,8 @@
         "PHP_82": "PHP 8.2",
         "edit": "Editar",
         "delete_virtualhosts_confirm": "¿Eliminar el host virtual <strong>{name}</strong>? Todos los datos serán eliminados. Esta acción <strong>NO</strong> es reversible",
-        "instance_configuration": "Aplicando la configuración del host virtual"
+        "instance_configuration": "Aplicando la configuración del host virtual",
+        "ServerNames_pattern": "Must be a valid fully qualified domain name: {error}"
     },
     "status": {
         "sftpgo_not_running": "SFTPGo no está configurado",
