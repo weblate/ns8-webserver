@@ -32,6 +32,20 @@ We use local database to store configuration, you can find it `/home/webserver1/
 
  When you create a virtualhost, a user called by the ID of the virtualhost (its tcp port php-fpm number), the first one is `9001`. A default password is created with the ID of the user, the first one is `9001`, you can modify it inside the web client or admin UI
 
+if you have lost your password you can change it by the command line 
+
+```
+# become webserver1 (adapt if it is not the good webserver)
+runagent -m webserver1
+
+# connect to container
+podman exec -ti sftpgo sh
+
+# change the password of admin user
+sftpgo resetpwd --admin admin
+```
+Installation documentation: https://github.com/drakkan/sftpgo/blob/main/docs/full-configuration.md
+
  We ask to traefik an external port to use it with sftp, see the Env var : `SFTP_TCP_PORT`
  
 If you want to upload files to the virtualhost:
