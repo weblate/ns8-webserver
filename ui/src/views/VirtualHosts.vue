@@ -370,7 +370,7 @@ export default {
       isEdit: false,
       isDisable:false,
       currentVhost: {
-        ServerNames:[],
+        ServerNames:[""],
         Port:"",
       },
       TitleEditModal:"",
