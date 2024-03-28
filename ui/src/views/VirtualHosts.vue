@@ -141,7 +141,7 @@
 
     <NsDangerDeleteModal
       :isShown="isShownDeleteVhostModal"
-      :name="currentVhost.ServerNames[0]"
+      :name="currentVhost.ServerNames[0] || ''"
       :title="$t('virtualhosts.delete')"
       :warning="$t('virtualhosts.please_read_carefully')"
       :description="$t('virtualhosts.delete_virtualhosts_confirm', { name: currentVhost.ServerNames[0]})"
