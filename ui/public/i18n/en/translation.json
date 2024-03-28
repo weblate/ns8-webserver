@@ -56,7 +56,7 @@
     "select_php_memory_limit":"Script memory limit (MB)",
     "select_php_post_max_file_size_limit":"Maximum POST requests size (MB)",
     "select_php_upload_max_file_limit":"Maximum file size (MB)",
-    "select_php_max_execution_time_limit":"Maximum execution time (seconds)",
+    "select_php_max_execution_time_limit":"Maximum execution time in seconds (0 is unlimited)",
     "select_php_max_file_upload_limit":"Maximum file upload number",
     "Min":"min",
     "Max":"max",
