@@ -14,7 +14,8 @@ declare -A version_map
 version_map[7.4]=7.4.33
 version_map[8.0]=8.0.30
 version_map[8.1]=8.1.27
-version_map[8.2]=8.2.16
+version_map[8.2]=8.2.17
+version_map[8.3]=8.3.4
 # Check if major_version is mapped properly
 if [[ -z "${version_map[$minor_version]}" ]]; then
     echo "PHP version $minor_version is not supported" 1>&2
