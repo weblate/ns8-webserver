@@ -136,7 +136,8 @@
         "empty_state_virtualhost_description": "È necessario creare un host virtuale facendo clic sul pulsante seguente",
         "PHP_82": "PHP 8.2",
         "cannot_use_fqdn_of_server": "Nome di dominio già utilizzato come server FQDN: {error}",
-        "ServerNames_pattern": "Deve essere un nome di dominio pienamente qualificato valido: {error}"
+        "ServerNames_pattern": "Deve essere un nome di dominio pienamente qualificato valido: {error}",
+        "PHP_83": "PHP 8.3"
     },
     "task": {
         "cannot_create_task": "Impossibile eseguire task {action}"
