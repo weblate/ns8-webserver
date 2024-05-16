@@ -33,6 +33,5 @@
             "title": "port",
             "description": "The port of the phpfpm pool"
         }
-        }
     }
 }
