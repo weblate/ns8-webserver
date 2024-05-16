@@ -12,6 +12,10 @@ Backend URL is reachable
     ...    return_rc=True  return_stdout=False
     Should Be Equal As Integers    ${rc}  0
 
+VirtualHost URL is reachable
+    ${rc} =    Execute Command    curl -f ${backend_url}
+    ...    return_rc=True  return_stdout=False
+    Should Be Equal As Integers    ${rc}  0
 
 *** Test Cases ***
 Check if webserver is installed correctly
@@ -43,6 +47,14 @@ Check if vhost can be updated
     ${rc} =    Execute Command    api-cli run module/${module_id}/update-vhost --data '{"PhpVersion":"8.2","ServerNames":["foo.com","john.com"],"Port":9001,"MemoryLimit":512,"AllowUrlfOpen":"enabled","UploadMaxFilesize":4,"PostMaxSize":8,"MaxExecutionTime":0,"MaxFileUploads":20,"lets_encrypt":false,"http2https":true,"Indexes":"enabled","status":"enabled"}'
     ...    return_rc=True  return_stdout=False
     Should Be Equal As Integers    ${rc}  0
+
+Retrieve virtualhost backend URL
+    # Assuming the test is running on a single node cluster
+    ${response} =    Run task     module/traefik1/get-route    {"instance":"${module_id}-foo.com"}
+    Set Suite Variable    ${backend_url}    ${response['url']}
+
+Check if virtualhost works as expected
+    Retry test    VirtualHost URL is reachable
 
 Check if vhost can be destroyed
     ${rc} =    Execute Command    api-cli run module/${module_id}/destroy-vhost --data '{"ServerNames": ["foo.com","john.com"],"port": 9001}'
