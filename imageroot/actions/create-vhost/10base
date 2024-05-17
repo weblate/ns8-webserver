@@ -89,3 +89,5 @@ headers = {
 
 conn.request("POST", "/api/v2/users", payload, headers)
 
+## create the directory for the user with podman exec
+subprocess.run(["podman", "exec", "sftpgo", "mkdir", "/srv/sftpgo/data/"+str(NextFpmPort)])
