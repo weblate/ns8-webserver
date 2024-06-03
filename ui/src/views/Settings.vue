@@ -22,7 +22,7 @@
             <template>
               <NsTextInput
                 :label="$t('settings.sftpgo_path')"
-                :placeholder="$t('common.eg_value', {value: '/sftpgo'})"
+                :placeholder="$t('common.eg_value', { value: '/sftpgo' })"
                 v-model.trim="path"
                 class="mg-bottom"
                 :invalid-message="$t(error.path)"
@@ -32,16 +32,12 @@
                 tooltipDirection="right"
               >
                 <template slot="tooltip">
-                  <div
-                    v-html="
-                      $t('settings.sftpgo_path_tips')
-                    "
-                  ></div>
+                  <div>{{ $t("settings.sftpgo_path_tips") }}</div>
                 </template>
               </NsTextInput>
               <NsTextInput
                 :label="$t('settings.sftp_tcp_port')"
-                :placeholder="$t('common.eg_value', {value: '3092'})"
+                :placeholder="$t('common.eg_value', { value: '3092' })"
                 type="number"
                 v-model.trim="sftp_tcp_port"
                 class="mg-bottom"
@@ -52,11 +48,13 @@
                 tooltipDirection="right"
               >
                 <template slot="tooltip">
-                  <div
-                    v-html="
-                      $t('settings.sftp_tcp_port_tips', {port: sftp_tcp_port || '{tcp_port}'})
-                    "
-                  ></div>
+                  <div>
+                    {{
+                      $t("settings.sftp_tcp_port_tips", {
+                        port: sftp_tcp_port || "{tcp_port}",
+                      })
+                    }}
+                  </div>
                 </template>
               </NsTextInput>
               <NsToggle
@@ -69,12 +67,14 @@
                 class="mg-bottom"
               >
                 <template slot="tooltip">
-                  <span
-                    v-html="$t('settings.sftpgo_explanation_tooltips')"
-                  ></span>
+                  <span>{{ $t("settings.sftpgo_explanation_tooltips") }}</span>
                 </template>
-                <template slot="text-left">{{ $t("common.disabled") }}</template>
-                <template slot="text-right">{{ $t("common.enabled") }}</template>
+                <template slot="text-left">{{
+                  $t("common.disabled")
+                }}</template>
+                <template slot="text-right">{{
+                  $t("common.enabled")
+                }}</template>
               </NsToggle>
               <cv-toggle
                 value="httpToHttps"
@@ -226,7 +226,7 @@ export default {
       this.path = config.path;
       this.sftp_tcp_port = config.sftp_tcp_port.toString();
       this.isHttpToHttpsEnabled = config.http2https;
-      this.isSftpgoPortEnabled = config.sftpgo_service
+      this.isSftpgoPortEnabled = config.sftpgo_service;
       this.loading.getConfiguration = false;
       this.focusElement("path");
     },

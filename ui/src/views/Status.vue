@@ -46,7 +46,7 @@
       </cv-column>
     </cv-row>
     <cv-row>
-      <template  v-if="!sftpgo_isrunning && ! loading.getConfiguration">
+      <template v-if="!sftpgo_isrunning && !loading.getConfiguration">
         <cv-column :md="4" :max="4">
           <NsInfoCard
             light
@@ -55,19 +55,23 @@
             :loading="loading.getConfiguration"
             class="min-height-card"
           >
-          <template slot="content">
-            <div class="card-rows">
-              <div class="card-row">
-                <NsButton kind="ghost" :icon="ArrowRight20" @click="goToAppPage(instanceName, 'settings')">
-                  {{ $t("status.configure_sftpgo") }}
-                </NsButton>
+            <template slot="content">
+              <div class="card-rows">
+                <div class="card-row">
+                  <NsButton
+                    kind="ghost"
+                    :icon="ArrowRight20"
+                    @click="goToAppPage(instanceName, 'settings')"
+                  >
+                    {{ $t("status.configure_sftpgo") }}
+                  </NsButton>
+                </div>
               </div>
-            </div>
-          </template>
+            </template>
           </NsInfoCard>
         </cv-column>
       </template>
-      <template  v-if="sftpgo_isrunning && ! loading.getConfiguration">
+      <template v-if="sftpgo_isrunning && !loading.getConfiguration">
         <cv-column :md="4" :max="4">
           <NsInfoCard
             light
@@ -76,25 +80,29 @@
             :loading="loading.getConfiguration"
             class="min-height-card"
           >
-          <template slot="content">
-            <div class="card-rows">
-              <div class="card-row">
-              {{ $t("status.default_credentials") }}
-                <cv-tooltip
-                  alignment="start"
-                  direction="top"
-                  :tip="$t('status.sftpgo_admin_login_tips')"
-                  class="info tooltip-mg-left"
-                >
-                </cv-tooltip>
+            <template slot="content">
+              <div class="card-rows">
+                <div class="card-row">
+                  {{ $t("status.default_credentials") }}
+                  <cv-tooltip
+                    alignment="start"
+                    direction="top"
+                    :tip="$t('status.sftpgo_admin_login_tips')"
+                    class="info tooltip-mg-left"
+                  >
+                  </cv-tooltip>
+                </div>
+                <div class="card-row">
+                  <NsButton
+                    kind="ghost"
+                    :icon="Launch20"
+                    @click="goToSftpgoAdmin"
+                  >
+                    {{ $t("status.open_web_admin_page") }}
+                  </NsButton>
+                </div>
               </div>
-              <div class="card-row">
-                <NsButton kind="ghost" :icon="Launch20" @click="goToSftpgoAdmin">
-                  {{ $t("status.open_web_admin_page") }}
-                </NsButton>
-              </div>
-            </div>
-          </template>
+            </template>
           </NsInfoCard>
         </cv-column>
         <cv-column :md="4" :max="4">
@@ -105,25 +113,29 @@
             :loading="loading.getConfiguration"
             class="min-height-card"
           >
-          <template slot="content">
-            <div class="card-rows">
-              <div class="card-row">
-              {{ $t("status.default_credentials") }}
-                <cv-tooltip
-                  alignment="start"
-                  direction="top"
-                  :tip="$t('status.sftpgo_user_login_tips')"
-                  class="info tooltip-mg-left"
-                >
-                </cv-tooltip>
+            <template slot="content">
+              <div class="card-rows">
+                <div class="card-row">
+                  {{ $t("status.default_credentials") }}
+                  <cv-tooltip
+                    alignment="start"
+                    direction="top"
+                    :tip="$t('status.sftpgo_user_login_tips')"
+                    class="info tooltip-mg-left"
+                  >
+                  </cv-tooltip>
+                </div>
+                <div class="card-row">
+                  <NsButton
+                    kind="ghost"
+                    :icon="Launch20"
+                    @click="goToSftpgoUser"
+                  >
+                    {{ $t("status.open_web_client_page") }}
+                  </NsButton>
+                </div>
               </div>
-              <div class="card-row">
-                <NsButton kind="ghost" :icon="Launch20" @click="goToSftpgoUser">
-                  {{ $t("status.open_web_client_page") }}
-                </NsButton>
-              </div>
-            </div>
-          </template>
+            </template>
           </NsInfoCard>
         </cv-column>
         <cv-column :md="4" :max="4">
@@ -134,20 +146,24 @@
             :loading="loading.getConfiguration"
             class="min-height-card"
           >
-          <template slot="content">
-            <div class="card-rows">
-              <div class="card-row">
-              {{$t("status.External_sftp_tcp_port")}}
-                <cv-tooltip
-                  alignment="start"
-                  direction="top"
-                  :tip="$t('status.sftp_tcp_port_tips',{port: this.sftp_tcp_port})"
-                  class="info tooltip-mg-left"
-                >
-                </cv-tooltip>
+            <template slot="content">
+              <div class="card-rows">
+                <div class="card-row">
+                  {{ $t("status.External_sftp_tcp_port") }}
+                  <cv-tooltip
+                    alignment="start"
+                    direction="top"
+                    :tip="
+                      $t('status.sftp_tcp_port_tips', {
+                        port: this.sftp_tcp_port,
+                      })
+                    "
+                    class="info tooltip-mg-left"
+                  >
+                  </cv-tooltip>
+                </div>
               </div>
-            </div>
-          </template>
+            </template>
           </NsInfoCard>
         </cv-column>
       </template>
@@ -371,7 +387,7 @@ import {
   IconService,
   UtilService,
 } from "@nethserver/ns8-ui-lib";
-import Settings32 from "@carbon/icons-vue/es/settings/32"; 
+import Settings32 from "@carbon/icons-vue/es/settings/32";
 export default {
   name: "Status",
   mixins: [TaskService, QueryParamService, IconService, UtilService],
@@ -394,8 +410,8 @@ export default {
         images: [],
         volumes: [],
       },
-      path:"",
-      sftp_tcp_port:"",
+      path: "",
+      sftp_tcp_port: "",
       sftpgo_isrunning: "",
       backupRepositories: [],
       backups: [],
@@ -403,13 +419,13 @@ export default {
         getStatus: false,
         listBackupRepositories: false,
         listBackups: false,
-        getConfiguration:false
+        getConfiguration: false,
       },
       error: {
         getStatus: "",
         listBackupRepositories: "",
         listBackups: "",
-        getConfiguration:""
+        getConfiguration: "",
       },
     };
   },
@@ -459,14 +475,14 @@ export default {
     this.listBackupRepositories();
   },
   methods: {
-      goToSftpgoAdmin() {
-        window.open('http://' + this.hostname + this.path+'/web/admin/login');
-      },
-      goToSftpgoUser() {
-        window.open('http://' + this.hostname + this.path+'/web/client/login');
-      },
-      
-        async getConfiguration() {
+    goToSftpgoAdmin() {
+      window.open("http://" + this.hostname + this.path + "/web/admin/login");
+    },
+    goToSftpgoUser() {
+      window.open("http://" + this.hostname + this.path + "/web/client/login");
+    },
+
+    async getConfiguration() {
       this.loading.getConfiguration = true;
       this.error.getConfiguration = "";
       const taskAction = "get-configuration";
@@ -512,8 +528,8 @@ export default {
       const config = taskResult.output;
       this.sftp_tcp_port = config.sftp_tcp_port;
       this.sftpgo_isrunning = config.sftpgo_isrunning;
-      this.path = config.path
-      this.hostname = config.hostname
+      this.path = config.path;
+      this.hostname = config.hostname;
       this.loading.getConfiguration = false;
     },
     async getStatus() {

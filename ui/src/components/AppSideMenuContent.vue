@@ -56,7 +56,7 @@ export default {
     Settings20,
     Information20,
     Activity20,
-    DataBase20
+    DataBase20,
   },
   mixins: [QueryParamService, UtilService],
   data() {
