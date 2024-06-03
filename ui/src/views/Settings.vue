@@ -32,7 +32,7 @@
                 tooltipDirection="right"
               >
                 <template slot="tooltip">
-                  <div v-html="$t('settings.sftpgo_path_tips')"></div>
+                  <div>{{ $t("settings.sftpgo_path_tips") }}</div>
                 </template>
               </NsTextInput>
               <NsTextInput
@@ -48,13 +48,13 @@
                 tooltipDirection="right"
               >
                 <template slot="tooltip">
-                  <div
-                    v-html="
-                      $t('settings.sftp_tcp_port_tips', {
-                        port: sftp_tcp_port || '{tcp_port}',
+                  <div>
+                    {{
+                      $t("settings.sftp_tcp_port_tips", {
+                        port: sftp_tcp_port || "{tcp_port}",
                       })
-                    "
-                  ></div>
+                    }}
+                  </div>
                 </template>
               </NsTextInput>
               <NsToggle
@@ -67,9 +67,7 @@
                 class="mg-bottom"
               >
                 <template slot="tooltip">
-                  <span
-                    v-html="$t('settings.sftpgo_explanation_tooltips')"
-                  ></span>
+                  <span>{{ $t("settings.sftpgo_explanation_tooltips") }}</span>
                 </template>
                 <template slot="text-left">{{
                   $t("common.disabled")
