@@ -140,6 +140,6 @@
         "PHP_83": "PHP 8.3"
     },
     "task": {
-        "cannot_create_task": "Impossibile eseguire task {action}"
+        "cannot_create_task": "Impossibile eseguire il task {action}"
     }
 }
