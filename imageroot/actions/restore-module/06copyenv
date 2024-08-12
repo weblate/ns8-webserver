@@ -32,6 +32,7 @@ for evar in [
         "TRAEFIK_PATH",
         "TRAEFIK_HTTP2HTTPS",
         "SFTP_TCP_PORT",
+        "SFTPGO_SERVICE",
     ]:
     agent.set_env(evar, original_environment[evar])
 
