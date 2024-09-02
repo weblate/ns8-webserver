@@ -35,5 +35,3 @@ for evar in [
         "SFTPGO_SERVICE",
     ]:
     agent.set_env(evar, original_environment[evar])
-
-agent.dump_env()
