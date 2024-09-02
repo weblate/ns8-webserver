@@ -23,10 +23,10 @@ We use local database to store configuration, you can find it `/home/webserver1/
 ### php-fpm
 
 - add `dyn-9001.custom` to  `/home/webserver1/.config/state/php{php version}-fpm-custom.d/` for example `/home/webserver1/.config/state/php7.4-fpm-custom.d/`
-- `vim /home/webserver1/.config/state/php7.4-fpm-custom.d/dyn-9001.custom` and wriite a valid php-fpm configuration
+- `vim /home/webserver1/.config/state/php7.4-fpm-custom.d/dyn-9001.custom` and write a valid php-fpm configuration
 - set the file ownership to webserver1 : `chown webserver1:webserver1 /home/webserver1/.config/state/php7.4-fpm-custom.d/dyn-9001.custom`
   
-## sftpgo
+## sftpgo : push the website
 
  Sftpgo is used to upload files to the webserver, once the webserver module is installed the default password and user are admin:admin at http://foo.com/sftpgo/, think to change it
 
@@ -65,6 +65,22 @@ sftp -P 3092 9001@foo.domain.org
 lcd /path/files
 put -r *
 ```
+
+## alternative method : pull the website
+
+Instead of pushing website content to an SFTP server, you can pull the content directly from the container. This method simplifies the content management
+
+To pull website content from inside the container once the virtualhost has been created (the vhost ID is the default sftp login: 9001, 9002, 9003, ... ):
+
+- Connect to the container:
+  `runagent -m webserver1 podman exec -ti nginx ash`
+- Navigate to the root directory of your virtualhost:
+ `cd /usr/share/nginx/html/9001`
+- Use commands like wget to get the latest content , for  rsync (to sync files), or git (to pull from a repository) you need to manually first install them each time you restart the container
+  `apk add rsync git`
+- permissions can be managed (must be adapted to the website)
+  `chown nginx:root -R /usr/share/nginx/html/9001`
+
 ### Create API key
 
 Sftpgo has a rest api that we can use by an API key, this is how we created it
