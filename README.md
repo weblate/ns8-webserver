@@ -23,7 +23,7 @@ We use local database to store configuration, you can find it `/home/webserver1/
 ### php-fpm
 
 - add `dyn-9001.custom` to  `/home/webserver1/.config/state/php{php version}-fpm-custom.d/` for example `/home/webserver1/.config/state/php7.4-fpm-custom.d/`
-- `vim /home/webserver1/.config/state/php7.4-fpm-custom.d/dyn-9001.custom` and wriite a valid php-fpm configuration
+- `vim /home/webserver1/.config/state/php7.4-fpm-custom.d/dyn-9001.custom` and write a valid php-fpm configuration
 - set the file ownership to webserver1 : `chown webserver1:webserver1 /home/webserver1/.config/state/php7.4-fpm-custom.d/dyn-9001.custom`
   
 ## sftpgo : push the website
