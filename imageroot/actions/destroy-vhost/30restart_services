@@ -37,4 +37,4 @@ for folder in PhpServiceArray:
         subprocess.run(["systemctl", "--user", "disable","--now", "phpfpm@"+ConfiguredServices[0].replace('php','')+".service"])
 
 # reload the containers
-subprocess.run(["systemctl", "--user", "reload", "phpfpm@\*.service"])
+subprocess.run(["systemctl", "--user", "reload", "phpfpm@*.service"])
