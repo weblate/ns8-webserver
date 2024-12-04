@@ -48,10 +48,16 @@ MaxFileUploads = data.get("MaxFileUploads",'20')
 h2hs = data.get("http2https", True)
 le = data.get("lets_encrypt", False)
 
-with open("databases/NextFpmPort", "r+") as fp:
-    NextFpmPort = int(fp.read() or "9000") + 1
-    fp.seek(0)
-    fp.write(str(NextFpmPort))
+# read Netxfpmport, the file could be missing so we need to handle the exception
+try:
+    with open("databases/NextFpmPort", "r+") as fp:
+        NextFpmPort = int(fp.read() or "9000") + 1
+        fp.seek(0)
+        fp.write(str(NextFpmPort))
+except FileNotFoundError:
+    NextFpmPort = 9001
+    with open("databases/NextFpmPort", "w") as fp:
+        fp.write(str(NextFpmPort))
 
 config['vhost'] = {}
 config['vhost']['ServerNames'] = ','.join(ServerNames)
