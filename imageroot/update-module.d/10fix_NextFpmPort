@@ -45,7 +45,7 @@ try:
     if ids:
         last_id = max(ids)
     else:
-        last_id = 10000  # Default to 10 000 if no IDs exist few chances to get 1000 active vhosts
+        last_id = 0  # Default to 0 if no IDs exist, no vhosts
 except:
     last_id = 10000  # Default to 10 000 if ecxeption, few chances to get 1000 active vhosts
 
