@@ -7,9 +7,9 @@
 
 # first release where buildt with a static file NextFpmPort set to 9000
 # during upgrade the value of virtualhost ID was overwritten with the default value 9000
-# this script will attempt to discover how many configuration we have 
+# this script will attempt to discover how many configurations we have 
 # and set the NextFpmPort file accordingly
-
+# Added with the release 1.0.20
 # Todo: NextFpmPort should be named LastFpmPort (when the vhost is created, the last ID is written there)
 
 # actions:
@@ -27,7 +27,7 @@ import sys
 directory = "databases/vhosts/"
 output_file = "databases/NextFpmPort"
 
-# no vhosts, no need to continue
+# no NextFpmPort, no need to continue
 if not os.path.exists(output_file):
     sys.exit(0)
 
