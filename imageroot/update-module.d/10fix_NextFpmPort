@@ -63,4 +63,4 @@ if current_id is None or last_id > current_id:
         f.write(str(last_id))
     print(f"{os.environ['MODULE_ID']}: Last virtualhost ID {last_id} written to {output_file}", file=sys.stderr)
 else:
-    print(f"{os.environ['MODULE_ID']}: Last virtualhost ID {last_id} not written, the current ID {current_id} in {output_file} is good", file=sys.stderr)
+    print(f"{os.environ['MODULE_ID']}: Last virtualhost ID {last_id} not written, the current ID {current_id} in {output_file} is correct", file=sys.stderr)
