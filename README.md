@@ -31,8 +31,10 @@ We use local database to store configuration, you can find it `/home/webserver1/
 #
 
 You can use a cron inside the sftpgo container. You must be compatible with a cron format. You can do it by using this command line:
-`runagent -m mail1`
-`podman exec -ti sftpgo crontab -e`
+```
+runagent -m mail1
+podman exec -ti sftpgo crontab -e
+```
 
 ```
 * * * * * command_to_execute
